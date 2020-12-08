@@ -1,0 +1,29 @@
+---
+title: Test Post
+author: ''
+date: '2020-12-08'
+slug: test-post
+categories: []
+tags: []
+description: ''
+---
+#Heading of my Post
+
+content of my post
+
+## Subheading
+
+More content
+
+
+```{r}
+quakes<- quakes
+```
+
+```{python}
+r.quakes.mag.mean()
+
+```
+<center>
+![](/post/2020-12-08-test-post_files/2017_infiniti_q50_red_sport_400_4k-HD.jpg){width=40%}
+</center>

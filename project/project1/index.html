@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Qustandi Fashho" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 1</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">Project 1</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         December 2, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="r-markdown" class="section level2">
+<h2>R Markdown</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this: #0. Introduction: I chose to do a comparative analysis between two soccer data sets. One data set contains information about rankings of soccer teams within out of all soccer leagues depending on last year's season and the other shows a prediction on which league will win in their respective league as well as Championship European competitions. Variables included are Soccer league, team, offensive score, defensive score, and the overall soccer index (SPI). The SPI was obtained through ESPN while all other factors are based on last year's season statistics. SPI seems like a good predictor of success. I believe that high success in the previous season will show correlation with success this season in their respective leagues. I chose this topic because I follow soccer religiously and enjoy playing as well. I expect those ranked top over all to be most successful in the UCL champions league and Europa League.</p>
+</div>
+<div id="tidying-rearranging-widelong" class="section level2">
+<h2>1.Tidying: Rearranging Wide/Long</h2>
+<pre class="r"><code>library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(data.table)
+library(jtools)
+
+install.packages(&quot;fivethirtyeightdata&quot;, repos = &quot;https://fivethirtyeightdata.github.io/drat/&quot;, 
+    type = &quot;source&quot;)
+library(fivethirtyeight)
+library(fivethirtyeightdata)
+spi_global_rankings</code></pre>
+<pre><code>## # A tibble: 576 x 7
+##    name                league                   rank prev_rank   off   def   spi
+##    &lt;chr&gt;               &lt;chr&gt;                   &lt;int&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 Manchester City     Barclays Premier League     1         1   2.8   0.2  92.5
+##  2 Barcelona           Spanish Primera Divisi…     2         2   3.1   0.4  92  
+##  3 Bayern Munich       German Bundesliga           3         3   3.1   0.4  91.9
+##  4 Real Madrid         Spanish Primera Divisi…     4         4   3.1   0.5  91.3
+##  5 Liverpool           Barclays Premier League     5         6   2.7   0.4  89.5
+##  6 Juventus            Italy Serie A               6         5   2.5   0.3  89.4
+##  7 Paris Saint-Germain French Ligue 1              7         7   2.8   0.4  88.9
+##  8 Atletico Madrid     Spanish Primera Divisi…     8         8   2.3   0.3  87.1
+##  9 Tottenham Hotspur   Barclays Premier League     9         9   2.5   0.5  85.7
+## 10 Chelsea             Barclays Premier League    10        10   2.4   0.5  85.1
+## # … with 566 more rows</code></pre>
+<pre class="r"><code>spi_matches</code></pre>
+<pre><code>## # A tibble: 34,109 x 23
+##    season date       league_id league team1 team2  spi1  spi2  prob1  prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838 
+##  2   2016 2016-08-12      1843 Frenc… AS M… Guin…  68.8  56.5 0.571  0.167 
+##  3   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362 
+##  4   2016 2016-08-13      2411 Barcl… Crys… West…  55.2  58.7 0.421  0.294 
+##  5   2016 2016-08-13      2411 Barcl… Ever… Tott…  68.0  73.2 0.391  0.340 
+##  6   2016 2016-08-13      2411 Barcl… Midd… Stok…  56.3  60.4 0.438  0.269 
+##  7   2016 2016-08-13      2411 Barcl… Burn… Swan…  59.0  59.7 0.448  0.266 
+##  8   2016 2016-08-13      2411 Barcl… Sout… Watf…  69.5  59.3 0.576  0.187 
+##  9   2016 2016-08-13      1843 Frenc… Bord… St E…  62.0  64.9 0.423  0.276 
+## 10   2016 2016-08-13      2411 Barcl… Manc… Sund…  86.4  53.6 0.815  0.0525
+## # … with 34,099 more rows, and 13 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;</code></pre>
+<pre class="r"><code>rankings &lt;- spi_global_rankings
+matches &lt;- spi_matches
+matches</code></pre>
+<pre><code>## # A tibble: 34,109 x 23
+##    season date       league_id league team1 team2  spi1  spi2  prob1  prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838 
+##  2   2016 2016-08-12      1843 Frenc… AS M… Guin…  68.8  56.5 0.571  0.167 
+##  3   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362 
+##  4   2016 2016-08-13      2411 Barcl… Crys… West…  55.2  58.7 0.421  0.294 
+##  5   2016 2016-08-13      2411 Barcl… Ever… Tott…  68.0  73.2 0.391  0.340 
+##  6   2016 2016-08-13      2411 Barcl… Midd… Stok…  56.3  60.4 0.438  0.269 
+##  7   2016 2016-08-13      2411 Barcl… Burn… Swan…  59.0  59.7 0.448  0.266 
+##  8   2016 2016-08-13      2411 Barcl… Sout… Watf…  69.5  59.3 0.576  0.187 
+##  9   2016 2016-08-13      1843 Frenc… Bord… St E…  62.0  64.9 0.423  0.276 
+## 10   2016 2016-08-13      2411 Barcl… Manc… Sund…  86.4  53.6 0.815  0.0525
+## # … with 34,099 more rows, and 13 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;</code></pre>
+<pre class="r"><code>matches %&gt;% spread(key = &quot;league&quot;, value = &quot;importance1&quot;)</code></pre>
+<pre><code>## # A tibble: 34,109 x 59
+##    season date       league_id team1 team2  spi1  spi2  prob1  prob2 probtie
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Bast… Pari…  51.2  85.7 0.0463 0.838    0.116
+##  2   2016 2016-08-12      1843 AS M… Guin…  68.8  56.5 0.571  0.167    0.262
+##  3   2016 2016-08-13      2411 Hull… Leic…  53.6  66.8 0.346  0.362    0.292
+##  4   2016 2016-08-13      2411 Crys… West…  55.2  58.7 0.421  0.294    0.285
+##  5   2016 2016-08-13      2411 Ever… Tott…  68.0  73.2 0.391  0.340    0.269
+##  6   2016 2016-08-13      2411 Midd… Stok…  56.3  60.4 0.438  0.269    0.293
+##  7   2016 2016-08-13      2411 Burn… Swan…  59.0  59.7 0.448  0.266    0.285
+##  8   2016 2016-08-13      2411 Sout… Watf…  69.5  59.3 0.576  0.187    0.237
+##  9   2016 2016-08-13      1843 Bord… St E…  62.0  64.9 0.423  0.276    0.300
+## 10   2016 2016-08-13      2411 Manc… Sund…  86.4  53.6 0.815  0.0525   0.132
+## # … with 34,099 more rows, and 49 more variables: proj_score1 &lt;dbl&gt;,
+## #   proj_score2 &lt;dbl&gt;, importance2 &lt;dbl&gt;, score1 &lt;dbl&gt;, score2 &lt;dbl&gt;,
+## #   xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;, adj_score1 &lt;dbl&gt;,
+## #   adj_score2 &lt;dbl&gt;, `Argentina Primera Division` &lt;dbl&gt;, `Australian
+## #   A-League` &lt;dbl&gt;, `Austrian T-Mobile Bundesliga` &lt;dbl&gt;, `Barclays Premier
+## #   League` &lt;dbl&gt;, `Belgian Jupiler League` &lt;dbl&gt;, `Brasileiro Série A` &lt;dbl&gt;,
+## #   `Chinese Super League` &lt;dbl&gt;, `Danish SAS-Ligaen` &lt;dbl&gt;, `Dutch
+## #   Eredivisie` &lt;dbl&gt;, `English League Championship` &lt;dbl&gt;, `English League
+## #   One` &lt;dbl&gt;, `English League Two` &lt;dbl&gt;, `French Ligue 1` &lt;dbl&gt;, `French
+## #   Ligue 2` &lt;dbl&gt;, `German 2. Bundesliga` &lt;dbl&gt;, `German Bundesliga` &lt;dbl&gt;,
+## #   `Greek Super League` &lt;dbl&gt;, `Italy Serie A` &lt;dbl&gt;, `Italy Serie B` &lt;dbl&gt;,
+## #   `Japanese J League` &lt;dbl&gt;, `Major League Soccer` &lt;dbl&gt;, `Mexican Primera
+## #   Division Torneo Apertura` &lt;dbl&gt;, `Mexican Primera Division Torneo
+## #   Clausura` &lt;dbl&gt;, `National Women&#39;s Soccer League` &lt;dbl&gt;, `Norwegian
+## #   Tippeligaen` &lt;dbl&gt;, `NWSL Challenge Cup` &lt;dbl&gt;, `Portuguese Liga` &lt;dbl&gt;,
+## #   `Russian Premier Liga` &lt;dbl&gt;, `Scottish Premiership` &lt;dbl&gt;, `South African
+## #   ABSA Premier League` &lt;dbl&gt;, `Spanish Primera Division` &lt;dbl&gt;, `Spanish
+## #   Segunda Division` &lt;dbl&gt;, `Swedish Allsvenskan` &lt;dbl&gt;, `Swiss Raiffeisen
+## #   Super League` &lt;dbl&gt;, `Turkish Turkcell Super Lig` &lt;dbl&gt;, `UEFA Champions
+## #   League` &lt;dbl&gt;, `UEFA Europa League` &lt;dbl&gt;, `United Soccer League` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>matches %&gt;% gather(key = &quot;importance1&quot;, value = &quot;league&quot;)  #Untidied here because my data was already neat</code></pre>
+<pre><code>## # A tibble: 716,289 x 2
+##    importance1 league
+##    &lt;chr&gt;       &lt;chr&gt; 
+##  1 season      2016  
+##  2 season      2016  
+##  3 season      2016  
+##  4 season      2016  
+##  5 season      2016  
+##  6 season      2016  
+##  7 season      2016  
+##  8 season      2016  
+##  9 season      2016  
+## 10 season      2016  
+## # … with 716,279 more rows</code></pre>
+<pre class="r"><code>rankings</code></pre>
+<pre><code>## # A tibble: 576 x 7
+##    name                league                   rank prev_rank   off   def   spi
+##    &lt;chr&gt;               &lt;chr&gt;                   &lt;int&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 Manchester City     Barclays Premier League     1         1   2.8   0.2  92.5
+##  2 Barcelona           Spanish Primera Divisi…     2         2   3.1   0.4  92  
+##  3 Bayern Munich       German Bundesliga           3         3   3.1   0.4  91.9
+##  4 Real Madrid         Spanish Primera Divisi…     4         4   3.1   0.5  91.3
+##  5 Liverpool           Barclays Premier League     5         6   2.7   0.4  89.5
+##  6 Juventus            Italy Serie A               6         5   2.5   0.3  89.4
+##  7 Paris Saint-Germain French Ligue 1              7         7   2.8   0.4  88.9
+##  8 Atletico Madrid     Spanish Primera Divisi…     8         8   2.3   0.3  87.1
+##  9 Tottenham Hotspur   Barclays Premier League     9         9   2.5   0.5  85.7
+## 10 Chelsea             Barclays Premier League    10        10   2.4   0.5  85.1
+## # … with 566 more rows</code></pre>
+<pre class="r"><code>rankings %&gt;% spread(key = &quot;league&quot;, value = &quot;rank&quot;)</code></pre>
+<pre><code>## # A tibble: 576 x 36
+##    name  prev_rank   off   def   spi `Argentina Prim… `Australian A-L…
+##    &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;int&gt;            &lt;int&gt;
+##  1 Manc…         1   2.8   0.2  92.5               NA               NA
+##  2 Barc…         2   3.1   0.4  92                 NA               NA
+##  3 Baye…         3   3.1   0.4  91.9               NA               NA
+##  4 Real…         4   3.1   0.5  91.3               NA               NA
+##  5 Live…         6   2.7   0.4  89.5               NA               NA
+##  6 Juve…         5   2.5   0.3  89.4               NA               NA
+##  7 Pari…         7   2.8   0.4  88.9               NA               NA
+##  8 Atle…         8   2.3   0.3  87.1               NA               NA
+##  9 Tott…         9   2.5   0.5  85.7               NA               NA
+## 10 Chel…        10   2.4   0.5  85.1               NA               NA
+## # … with 566 more rows, and 29 more variables: `Austrian T-Mobile
+## #   Bundesliga` &lt;int&gt;, `Barclays Premier League` &lt;int&gt;, `Belgian Jupiler
+## #   League` &lt;int&gt;, `Brasileiro Série A` &lt;int&gt;, `Chinese Super League` &lt;int&gt;,
+## #   `Danish SAS-Ligaen` &lt;int&gt;, `Dutch Eredivisie` &lt;int&gt;, `English League
+## #   Championship` &lt;int&gt;, `English League One` &lt;int&gt;, `English League
+## #   Two` &lt;int&gt;, `French Ligue 1` &lt;int&gt;, `French Ligue 2` &lt;int&gt;, `German 2.
+## #   Bundesliga` &lt;int&gt;, `German Bundesliga` &lt;int&gt;, `Italy Serie A` &lt;int&gt;,
+## #   `Japanese J League` &lt;int&gt;, `Major League Soccer` &lt;int&gt;, `Mexican Primera
+## #   Division Torneo Apertura` &lt;int&gt;, `Norwegian Tippeligaen` &lt;int&gt;, `Portuguese
+## #   Liga` &lt;int&gt;, `Russian Premier Liga` &lt;int&gt;, `Scottish Premiership` &lt;int&gt;,
+## #   `South African ABSA Premier League` &lt;int&gt;, `Spanish Primera
+## #   Division` &lt;int&gt;, `Spanish Segunda Division` &lt;int&gt;, `Swedish
+## #   Allsvenskan` &lt;int&gt;, `Swiss Raiffeisen Super League` &lt;int&gt;, `Turkish
+## #   Turkcell Super Lig` &lt;int&gt;, `United Soccer League` &lt;int&gt;</code></pre>
+<pre class="r"><code>rankings %&gt;% gather(key = &quot;rank&quot;, value = &quot;league&quot;)  #Untidied here because my data was already neat</code></pre>
+<pre><code>## # A tibble: 2,880 x 2
+##    rank  league             
+##    &lt;chr&gt; &lt;chr&gt;              
+##  1 name  Manchester City    
+##  2 name  Barcelona          
+##  3 name  Bayern Munich      
+##  4 name  Real Madrid        
+##  5 name  Liverpool          
+##  6 name  Juventus           
+##  7 name  Paris Saint-Germain
+##  8 name  Atletico Madrid    
+##  9 name  Tottenham Hotspur  
+## 10 name  Chelsea            
+## # … with 2,870 more rows</code></pre>
+</div>
+<div id="used-rankings-and-matches-datasets-because-they-were-tidied-fine-and-have-the-variables-i-need-but-i-did-untidy-and-retidy.-my-data-looks-fine-and-i-will-be-using-spi-spi1-spi1-and-rank-for-my-numerical-variables." class="section level2">
+<h2>used rankings and matches datasets because they were tidied fine and have the variables I need but I did untidy and retidy. My data looks fine and I will be using spi, spi1, spi1, and rank for my numerical variables.</h2>
+</div>
+<div id="joiningmerging" class="section level2">
+<h2>2. Joining/Merging</h2>
+<pre class="r"><code>left_join(matches, rankings, by = &quot;league&quot;)</code></pre>
+<pre><code>## # A tibble: 605,288 x 29
+##    season date       league_id league team1 team2  spi1  spi2  prob1 prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  2   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  3   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  4   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  5   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  6   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  7   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  8   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  9   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## 10   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## # … with 605,278 more rows, and 19 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;, name &lt;chr&gt;, rank &lt;int&gt;,
+## #   prev_rank &lt;int&gt;, off &lt;dbl&gt;, def &lt;dbl&gt;, spi &lt;dbl&gt;</code></pre>
+<pre class="r"><code>soccer_joined &lt;- left_join(matches, rankings, by = &quot;league&quot;)
+soccer_joined</code></pre>
+<pre><code>## # A tibble: 605,288 x 29
+##    season date       league_id league team1 team2  spi1  spi2  prob1 prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  2   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  3   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  4   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  5   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  6   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  7   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  8   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  9   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## 10   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## # … with 605,278 more rows, and 19 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;, name &lt;chr&gt;, rank &lt;int&gt;,
+## #   prev_rank &lt;int&gt;, off &lt;dbl&gt;, def &lt;dbl&gt;, spi &lt;dbl&gt;</code></pre>
+</div>
+<div id="here-i-joined-my-matches-dataset-with-the-rankings-dataset.-i-joined-via-the-leagues-variable-and-i-kept-the-spi-variable-as-is-because-that-is-what-i-am-looking-at.-i-did-a-left_join-without-removing-any-variables-because-they-do-not-interrupt-my-data-analysis.-i-chose-to-do-the-left_join-function-because-i-wanted-one-tabel-that-contains-its-own-values-along-with-the-common-values-of-the-other-data-set-which-in-this-case-would-be-the-league-variable-found-in-both-data-sets." class="section level1">
+<h1>Here I joined my &quot;matches&quot; dataset with the &quot;rankings&quot; dataset. I joined via the &quot;leagues&quot; variable and I kept the SPI variable as is because that is what I am looking at. I did a left_join without removing any variables because they do not interrupt my data analysis. I chose to do the left_join function because I wanted one tabel that contains its own values along with the common values of the other data set which in this case would be the &quot;league&quot; variable found in both data sets.</h1>
+<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+</div>
+<div id="wrangling" class="section level1">
+<h1>3. Wrangling</h1>
+<pre class="r"><code>library(dplyr)
+soccer_spi_omit &lt;- na.omit(soccer_joined$spi)
+filter(soccer_joined, spi &gt; 80)</code></pre>
+<pre><code>## # A tibble: 23,422 x 29
+##    season date       league_id league team1 team2  spi1  spi2  prob1 prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  2   2016 2016-08-12      1843 Frenc… AS M… Guin…  68.8  56.5 0.571  0.167
+##  3   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362
+##  4   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362
+##  5   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362
+##  6   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362
+##  7   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362
+##  8   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346  0.362
+##  9   2016 2016-08-13      2411 Barcl… Crys… West…  55.2  58.7 0.421  0.294
+## 10   2016 2016-08-13      2411 Barcl… Crys… West…  55.2  58.7 0.421  0.294
+## # … with 23,412 more rows, and 19 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;, name &lt;chr&gt;, rank &lt;int&gt;,
+## #   prev_rank &lt;int&gt;, off &lt;dbl&gt;, def &lt;dbl&gt;, spi &lt;dbl&gt;</code></pre>
+<pre class="r"><code>arrange(soccer_joined, spi)</code></pre>
+<pre><code>## # A tibble: 605,288 x 29
+##    season date       league_id league team1 team2  spi1  spi2 prob1 prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1   2018 2018-08-04      2414 Engli… Grim… Fore…  6.9  11.1  0.350 0.385
+##  2   2018 2018-08-04      2414 Engli… Swin… Macc… 13.2   8.8  0.485 0.26 
+##  3   2018 2018-08-04      2414 Engli… Nort… Linc… 19.3  15.5  0.463 0.284
+##  4   2018 2018-08-04      2414 Engli… Stev… Tran… 10.0   9.82 0.413 0.316
+##  5   2018 2018-08-04      2414 Engli… Mans… Newp… 17     8.43 0.555 0.197
+##  6   2018 2018-08-04      2414 Engli… Crew… More… 11.8   7.71 0.471 0.259
+##  7   2018 2018-08-04      2414 Engli… Bury  Yeov… 19.2   8.11 0.608 0.175
+##  8   2018 2018-08-04      2414 Engli… Chel… Craw…  9.65 10.9  0.396 0.367
+##  9   2018 2018-08-04      2414 Engli… Nott… Colc… 14.4   8.46 0.489 0.236
+## 10   2018 2018-08-04      2414 Engli… Exet… Carl… 15.9  12.5  0.450 0.281
+## # … with 605,278 more rows, and 19 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;, name &lt;chr&gt;, rank &lt;int&gt;,
+## #   prev_rank &lt;int&gt;, off &lt;dbl&gt;, def &lt;dbl&gt;, spi &lt;dbl&gt;</code></pre>
+<pre class="r"><code>arrange(soccer_joined, desc(spi))</code></pre>
+<pre><code>## # A tibble: 605,288 x 29
+##    season date       league_id league team1 team2  spi1  spi2 prob1  prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1   2016 2016-08-13      2411 Barcl… Hull… Leic…  53.6  66.8 0.346 0.362 
+##  2   2016 2016-08-13      2411 Barcl… Crys… West…  55.2  58.7 0.421 0.294 
+##  3   2016 2016-08-13      2411 Barcl… Ever… Tott…  68.0  73.2 0.391 0.340 
+##  4   2016 2016-08-13      2411 Barcl… Midd… Stok…  56.3  60.4 0.438 0.269 
+##  5   2016 2016-08-13      2411 Barcl… Burn… Swan…  59.0  59.7 0.448 0.266 
+##  6   2016 2016-08-13      2411 Barcl… Sout… Watf…  69.5  59.3 0.576 0.187 
+##  7   2016 2016-08-13      2411 Barcl… Manc… Sund…  86.4  53.6 0.815 0.0525
+##  8   2016 2016-08-14      2411 Barcl… AFC … Manc…  61.6  80.5 0.211 0.546 
+##  9   2016 2016-08-14      2411 Barcl… Arse… Live…  82.6  77.4 0.555 0.212 
+## 10   2016 2016-08-15      2411 Barcl… Chel… West…  80.7  63.3 0.691 0.118 
+## # … with 605,278 more rows, and 19 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;, name &lt;chr&gt;, rank &lt;int&gt;,
+## #   prev_rank &lt;int&gt;, off &lt;dbl&gt;, def &lt;dbl&gt;, spi &lt;dbl&gt;</code></pre>
+<pre class="r"><code>soccer_joined %&gt;% select(league, name, spi, rank)</code></pre>
+<pre><code>## # A tibble: 605,288 x 4
+##    league         name                  spi  rank
+##    &lt;chr&gt;          &lt;chr&gt;               &lt;dbl&gt; &lt;int&gt;
+##  1 French Ligue 1 Paris Saint-Germain  88.9     7
+##  2 French Ligue 1 Lyon                 76.2    24
+##  3 French Ligue 1 Marseille            74.8    32
+##  4 French Ligue 1 AS Monaco            70.7    49
+##  5 French Ligue 1 Nice                 63.7    84
+##  6 French Ligue 1 Bordeaux             62.3    95
+##  7 French Ligue 1 Stade Rennes         61.4   104
+##  8 French Ligue 1 St Etienne           61.2   106
+##  9 French Ligue 1 Montpellier          60.7   108
+## 10 French Ligue 1 Nantes               60.5   110
+## # … with 605,278 more rows</code></pre>
+<pre class="r"><code>soccer_joined %&gt;% mutate(average = (spi1 + spi2)/2)</code></pre>
+<pre><code>## # A tibble: 605,288 x 30
+##    season date       league_id league team1 team2  spi1  spi2  prob1 prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  2   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  3   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  4   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  5   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  6   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  7   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  8   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  9   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## 10   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## # … with 605,278 more rows, and 20 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;, name &lt;chr&gt;, rank &lt;int&gt;,
+## #   prev_rank &lt;int&gt;, off &lt;dbl&gt;, def &lt;dbl&gt;, spi &lt;dbl&gt;, average &lt;dbl&gt;</code></pre>
+<pre class="r"><code>soccer &lt;- na.omit(soccer_joined)
+soccersummary &lt;- summarise(soccer, count = n(), mean(soccer$spi), 
+    sd(soccer$spi), mad(soccer$spi), var(soccer$spi), max(soccer$spi), 
+    min(soccer$spi), median(soccer$spi), first(soccer$spi), last(soccer$spi))
+soccersummary</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##    count `mean(soccer$sp… `sd(soccer$spi)` `mad(soccer$spi… `var(soccer$spi…
+##    &lt;int&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1 276372             56.9             15.4             17.2             237.
+## # … with 5 more variables: `max(soccer$spi)` &lt;dbl&gt;, `min(soccer$spi)` &lt;dbl&gt;,
+## #   `median(soccer$spi)` &lt;dbl&gt;, `first(soccer$spi)` &lt;dbl&gt;,
+## #   `last(soccer$spi)` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>soccer %&gt;% group_by(league) %&gt;% top_n(14, spi) %&gt;% summarize(mean(spi))</code></pre>
+<pre><code>## # A tibble: 14 x 2
+##    league                                   `mean(spi)`
+##    &lt;chr&gt;                                          &lt;dbl&gt;
+##  1 Argentina Primera Division                      65.5
+##  2 Australian A-League                             50  
+##  3 Barclays Premier League                         92.5
+##  4 Brasileiro Série A                              64.6
+##  5 Chinese Super League                            64  
+##  6 English League Championship                     64.3
+##  7 French Ligue 1                                  88.9
+##  8 German 2. Bundesliga                            53.7
+##  9 German Bundesliga                               91.9
+## 10 Italy Serie A                                   89.4
+## 11 Major League Soccer                             53.9
+## 12 Mexican Primera Division Torneo Apertura        58.7
+## 13 Portuguese Liga                                 80.7
+## 14 Spanish Primera Division                        92</code></pre>
+<pre class="r"><code>soccer %&gt;% group_by(team1) %&gt;% top_n(300, spi) %&gt;% summarize(mean(spi))</code></pre>
+<pre><code>## # A tibble: 324 x 2
+##    team1                 `mean(spi)`
+##    &lt;chr&gt;                       &lt;dbl&gt;
+##  1 1. FC Heidenheim 1846        40.0
+##  2 1. FC Kaiserslautern         34.4
+##  3 1. FC Magdeburg              34.4
+##  4 1. FC Nürnberg               67.3
+##  5 1. FC Union Berlin           67.3
+##  6 AC Milan                     82.2
+##  7 Adelaide United              34.9
+##  8 AFC Bournemouth              86.9
+##  9 Alavés                       84.3
+## 10 Aldosivi                     50.2
+## # … with 314 more rows</code></pre>
+<pre class="r"><code>soccer %&gt;% group_by(rank) %&gt;% top_n(300, spi) %&gt;% summarize(mean(spi))</code></pre>
+<pre><code>## # A tibble: 271 x 2
+##     rank `mean(spi)`
+##    &lt;int&gt;       &lt;dbl&gt;
+##  1     1        92.5
+##  2     2        92  
+##  3     3        91.9
+##  4     4        91.3
+##  5     5        89.5
+##  6     6        89.4
+##  7     7        88.9
+##  8     8        87.1
+##  9     9        85.7
+## 10    10        85.1
+## # … with 261 more rows</code></pre>
+<pre class="r"><code>cor(soccer$spi, soccer$rank)</code></pre>
+<pre><code>## [1] -0.9593863</code></pre>
+<pre class="r"><code>install.packages(&quot;corrplot&quot;, repos = &quot;http://cran.us.r-project.org&quot;)
+library(&quot;corrplot&quot;)
+summary(soccer)</code></pre>
+<pre><code>##      season          date              league_id       league         
+##  Min.   :2016   Min.   :2016-08-12   Min.   :1843   Length:276372     
+##  1st Qu.:2017   1st Qu.:2018-01-26   1st Qu.:1854   Class :character  
+##  Median :2018   Median :2018-10-28   Median :1951   Mode  :character  
+##     team1              team2                spi1            spi2      
+##  Length:276372      Length:276372      Min.   :15.46   Min.   :15.03  
+##  Class :character   Class :character   1st Qu.:42.58   1st Qu.:42.49  
+##  Mode  :character   Mode  :character   Median :54.64   Median :54.47  
+##      prob1            prob2           probtie        proj_score1   
+##  Min.   :0.0307   Min.   :0.0037   Min.   :0.0000   Min.   :0.430  
+##  1st Qu.:0.3650   1st Qu.:0.2021   1st Qu.:0.2355   1st Qu.:1.260  
+##  Median :0.4494   Median :0.2746   Median :0.2626   Median :1.460  
+##   proj_score2     importance1      importance2         score1      
+##  Min.   :0.200   Min.   :  0.00   Min.   :  0.00   Min.   : 0.000  
+##  1st Qu.:0.880   1st Qu.:  9.30   1st Qu.:  9.10   1st Qu.: 1.000  
+##  Median :1.080   Median : 24.70   Median : 23.80   Median : 1.000  
+##      score2           xg1             xg2            nsxg1      
+##  Min.   :0.000   Min.   :0.000   Min.   :0.000   Min.   :0.000  
+##  1st Qu.:0.000   1st Qu.:0.890   1st Qu.:0.620   1st Qu.:0.960  
+##  Median :1.000   Median :1.390   Median :1.040   Median :1.330  
+##      nsxg2         adj_score1      adj_score2        name          
+##  Min.   :0.000   Min.   :0.000   Min.   :0.000   Length:276372     
+##  1st Qu.:0.730   1st Qu.:1.050   1st Qu.:0.000   Class :character  
+##  Median :1.050   Median :1.050   Median :1.050   Mode  :character  
+##       rank         prev_rank          off           def             spi       
+##  Min.   :  1.0   Min.   :  1.0   Min.   :0.8   Min.   :0.200   Min.   :19.40  
+##  1st Qu.: 62.0   1st Qu.: 62.0   1st Qu.:1.3   1st Qu.:0.800   1st Qu.:44.20  
+##  Median :135.0   Median :137.0   Median :1.6   Median :1.100   Median :57.10  
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 3 rows ]</code></pre>
+<pre class="r"><code>soccer</code></pre>
+<pre><code>## # A tibble: 276,372 x 29
+##    season date       league_id league team1 team2  spi1  spi2  prob1 prob2
+##     &lt;dbl&gt; &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  2   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  3   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  4   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  5   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  6   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  7   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  8   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+##  9   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## 10   2016 2016-08-12      1843 Frenc… Bast… Pari…  51.2  85.7 0.0463 0.838
+## # … with 276,362 more rows, and 19 more variables: probtie &lt;dbl&gt;,
+## #   proj_score1 &lt;dbl&gt;, proj_score2 &lt;dbl&gt;, importance1 &lt;dbl&gt;, importance2 &lt;dbl&gt;,
+## #   score1 &lt;dbl&gt;, score2 &lt;dbl&gt;, xg1 &lt;dbl&gt;, xg2 &lt;dbl&gt;, nsxg1 &lt;dbl&gt;, nsxg2 &lt;dbl&gt;,
+## #   adj_score1 &lt;dbl&gt;, adj_score2 &lt;dbl&gt;, name &lt;chr&gt;, rank &lt;int&gt;,
+## #   prev_rank &lt;int&gt;, off &lt;dbl&gt;, def &lt;dbl&gt;, spi &lt;dbl&gt;</code></pre>
+<pre class="r"><code>cor_matrix_soccer &lt;- soccer %&gt;% select(spi, rank, spi1, spi2, 
+    prev_rank, off, def)
+cor(cor_matrix_soccer)</code></pre>
+<pre><code>##                  spi       rank       spi1       spi2  prev_rank        off
+## spi        1.0000000 -0.9593863  0.6545299  0.6557274 -0.9583536  0.9450299
+## rank      -0.9593863  1.0000000 -0.6637630 -0.6649480  0.9986052 -0.8515368
+## spi1       0.6545299 -0.6637630  1.0000000  0.6438244 -0.6629179  0.5643759
+## spi2       0.6557274 -0.6649480  0.6438244  1.0000000 -0.6640978  0.5652011
+## prev_rank -0.9583536  0.9986052 -0.6629179 -0.6640978  1.0000000 -0.8512087
+## off        0.9450299 -0.8515368  0.5643759  0.5652011 -0.8512087  1.0000000
+## def       -0.9512780  0.9295565 -0.6559451 -0.6575629  0.9279800 -0.8244960
+##                  def
+## spi       -0.9512780
+## rank       0.9295565
+## spi1      -0.6559451
+## spi2      -0.6575629
+## prev_rank  0.9279800
+## off       -0.8244960
+## def        1.0000000</code></pre>
+</div>
+<div id="filter-an-spi-greater-than-80-has-a-much-higher-chance-of-advancing-to-top-5-in-their-respective-leagues-as-well-in-the-ucl-or-europe-league." class="section level1">
+<h1>Filter: #An SPI greater than 80 has a much higher chance of advancing to top 5 in their respective leagues as well in the UCL or Europe league.</h1>
+</div>
+<div id="arrange-a-spi-from-lowest-to-least-was-used-here-to-quantify-the-lowest-ranked-teams-in-the-datasets-and-the-least-possibility-of-ranking-high-in-their-leagues-or-in-the-ucleuropa-champions-league.-i-also-used-the-descending-function-as-another-step-that-helps-identify-the-highest-ranked-team-with-the-hughest-chance-of-winnign-the-leage" class="section level1">
+<h1>Arrange: A SPI from lowest to least was used here to quantify the lowest ranked teams in the datasets and the least possibility of ranking high in their leagues or in the UCL/Europa Champions league. I also used the descending function as another step that helps identify the highest ranked team with the hughest chance of winnign the leage</h1>
+</div>
+<div id="select-allowed-me-to-view-a-data-set-only-with-columns-league-spi-league-and-names-of-the-teams." class="section level1">
+<h1>Select: Allowed me to view a data set only with columns league, spi, league, and names of the teams.</h1>
+</div>
+<div id="mutate-averaged-spi1-and-spi2-offense-and-defense-to-see-if-it-averaged-to-the-total-spi-for-the-specific-team.-the-higher-the-spi-the-more-competitve-the-team-is-in-placing-in-their-leagues-and-the-champions-league." class="section level1">
+<h1>Mutate: averaged spi1 and spi2 (offense and defense) to see if it averaged to the total spi for the specific team. The higher the spi, the more competitve the team is in placing in their leagues and the champions league.</h1>
+</div>
+<div id="summary-using-many-different-function-statsitics-to-get-stats-for-the-spi-in-the-soccer-joined-data-set-after-removing-na.-here-it-tells-me-an-overall-view-of-spi-data." class="section level1">
+<h1>Summary: Using many different function statsitics to get stats for the spi in the soccer joined data set after removing NA. Here it tells me an overall view of SPI data.</h1>
+</div>
+<div id="categorical-group_by-i-used-the-top-14-leagues-and-the-top-300-teams-to-group-them-in-alphabetical-order-with-their-spi-scores.-i-also-used-rank-which-seems-most-useful-as-it-ranked-the-teams-from-highest-to-lowest-based-on-spi-non-categorical." class="section level1">
+<h1>Categorical group_by: I used the top 14 leagues and the top 300 teams to group them in alphabetical order with their SPI scores. I also used rank which seems most useful as it ranked the teams from highest to lowest based on spi (non-categorical).</h1>
+</div>
+<div id="problems.-because-i-did-not-use-all-the-variables-presented-and-i-was-focusing-mostly-on-league-team-spi-and-rank-i-did-not-need-the-other-variables-but-they-did-nit-provide-any-potential-problem-because-they-are-not-really-conflicting." class="section level1">
+<h1>Problems. Because I did not use all the variables presented and I was focusing mostly on league, team, spi, and rank I did not need the other variables, but they did nit provide any potential problem because they are not really conflicting.</h1>
+</div>
+<div id="correlation-matrix-results-shown-above-closer-to-positive-one-is-stronger-positive-correaltion-and-closer-to--1-is-stronger-negative-correlation" class="section level1">
+<h1>correlation matrix: results shown above closer to positive one is stronger positive correaltion and closer to -1 is stronger negative correlation</h1>
+</div>
+<div id="visualizing" class="section level1">
+<h1>4: Visualizing</h1>
+<pre class="r"><code>library(ggplot2)
+install.packages(&quot;ggcorrplot&quot;, repos = &quot;http://cran.us.r-project.org&quot;)
+library(ggcorrplot)
+cor(cor_matrix_soccer)</code></pre>
+<pre><code>##                  spi       rank       spi1       spi2  prev_rank        off
+## spi        1.0000000 -0.9593863  0.6545299  0.6557274 -0.9583536  0.9450299
+## rank      -0.9593863  1.0000000 -0.6637630 -0.6649480  0.9986052 -0.8515368
+## spi1       0.6545299 -0.6637630  1.0000000  0.6438244 -0.6629179  0.5643759
+## spi2       0.6557274 -0.6649480  0.6438244  1.0000000 -0.6640978  0.5652011
+## prev_rank -0.9583536  0.9986052 -0.6629179 -0.6640978  1.0000000 -0.8512087
+## off        0.9450299 -0.8515368  0.5643759  0.5652011 -0.8512087  1.0000000
+## def       -0.9512780  0.9295565 -0.6559451 -0.6575629  0.9279800 -0.8244960
+##                  def
+## spi       -0.9512780
+## rank       0.9295565
+## spi1      -0.6559451
+## spi2      -0.6575629
+## prev_rank  0.9279800
+## off       -0.8244960
+## def        1.0000000</code></pre>
+<pre class="r"><code>ggcorrplot(cor(cor_matrix_soccer))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(cor_matrix_soccer, aes(x = soccer$spi, y = soccer$rank, 
+    )) + ggtitle(&quot;SPI vs Rank of Soccer CLubs&quot;) + labs(x = &quot;SPI&quot;, 
+    y = &quot;Club Ranking&quot;) + geom_point(shape = 21, colour = &quot;purple&quot;, 
+    size = 3) + scale_x_continuous(lim = c(0, 100)) + scale_y_continuous(lim = c(0, 
+    600))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(cor_matrix_soccer, aes(x = soccer$spi, y = soccer$prev_rank)) + 
+    ggtitle(&quot;SPI vs Previous Season Rankings&quot;) + labs(x = &quot;SPI&quot;, 
+    y = &quot;Ranking from Last Season&quot;) + geom_point(size = 4, colour = &quot;deepskyblue&quot;) + 
+    geom_smooth(colour = &quot;forestgreen&quot;, size = 2.5)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(cor_matrix_soccer, aes(soccer$spi, soccer$rank, soccer$prev_rank)) + 
+    geom_point(aes(color = log10(spi)), size = 3) + scale_color_gradient(low = &quot;yellow&quot;, 
+    high = &quot;red&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(cor_matrix_soccer, aes(x = soccer$spi, y = soccer$prev_rank)) + 
+    ggtitle(&quot;SPI vs Previous Season Rankings&quot;) + labs(x = &quot;SPI&quot;, 
+    y = &quot;Ranking from Last Season&quot;) + geom_point(size = 4, colour = &quot;deepskyblue&quot;) + 
+    stat_smooth(colour = &quot;forestgreen&quot;, size = 2.5)  ##Same as Line 98 look at this to see just with stat_smooth, sould not find stat=&#39;summary&#39;</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(cor_matrix_soccer, aes(x = soccer$rank, y = soccer$prev_rank)) + 
+    ggtitle(&quot;Current vs Previous Season Rankings&quot;) + labs(x = &quot;Current Rank&quot;, 
+    y = &quot;Ranking from Last Season&quot;) + geom_point(size = 2, colour = &quot;red&quot;) + 
+    geom_smooth(colour = &quot;yellow&quot;, size = 2)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-6.png" width="672" style="display: block; margin: auto;" /> #I used a geom_point, geom_smooth, and another geom_point with a color gradient. On the first graph I did spi vs rankings while on the secon graph, I did spi vs previous rankings. As we expected from getting correlation, as SPI increased, the rank number decreased (went up in rank). With a -0.9593863, this is an extremely negative correlation so close to one that it is definetly significant and very correlated. I also compared SPI vs prev_rankings. The teams did not change much from last season to this season. We can tell this because the correlation matrix gives the number of -0.9583536 which is extremely close to this season. Therefore, the graph is very similar with an extreme negative correlation between SPI and previous rankings. I was curious about a graph between current rank vs previous rank, so I plotted that as well, and ofcourse they are almost positive 1 (0.9986052), because it has not changed much so the relationship between previous rank and current rank are linear and significant. My heat plot I used here also used to see the correlation between all my numeric variables.</p>
+</div>
+<div id="dimensionality-reduction" class="section level1">
+<h1>5 Dimensionality Reduction</h1>
+<pre class="r"><code>set.seed(348)
+kmeans1 &lt;- cor_matrix_soccer %&gt;% kmeans(1)
+kmeans1</code></pre>
+<pre><code>## K-means clustering with 1 clusters of sizes 276372
+## 
+## Cluster means:
+##        spi     rank     spi1     spi2 prev_rank      off      def
+## 1 56.92504 162.8244 55.29957 55.19019  162.8152 1.599838 1.073214
+## 
+## Clustering vector:
+##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [75] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 276272 entries ]
+## 
+## Within cluster sum of squares by cluster:
+## [1] 8349930578
+##  (between_SS / total_SS =   0.0 %)
+## 
+## Available components:
+## 
+## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;     &quot;tot.withinss&quot;
+## [6] &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;         &quot;ifault&quot;</code></pre>
+<pre class="r"><code>kmeansclust &lt;- cor_matrix_soccer %&gt;% mutate(cluster = as.factor(kmeans1$cluster))
+kmeansclust %&gt;% ggplot(aes(spi1, spi2, color = cluster)) + geom_point() + 
+    ggtitle(&quot;SPI1 vs SPI2 CLustering&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /> #I tried to use the PAM clustering function here, however my data was too large for PAM. instead I used kmean and it worked perfectly. I then ggplot and did a cluster betwene spi1 and spi2 (offensive and defensive SPI) and found out that the cluster was just one big cluster as I expected since they are relatively similar.</p>
+</div>
+<div id="conclusion-overall-i-did-not-feel-like-i-could-do-this-project-however-after-carefully-reviewing-the-notes-and-watching-parts-of-the-lectures-and-tutorials-i-remembered-more-than-i-thought.-i-enjoyed-this-project-because-it-gave-me-the-freedom-to-chose-any-data-i-liked-and-manipulate-variables-and-find-data-to-support-or-refute-my-previous-thouhgts.-i-chose-soccer-data-sets-as-the-soccer-season-is-in-full-swing-and-mostly-enjoyed-finding-correlations-between-different-variables-that-were-interestint-to-me-and-to-see-the-progress-or-degeneration-of-teams-from-this-season-vs-last-season." class="section level1">
+<h1>Conclusion: Overall, I did not feel like I could do this project, however, after carefully reviewing the notes and watching parts of the lectures and tutorials, I remembered more than I thought. I enjoyed this project because it gave me the freedom to chose any data I liked and manipulate variables and find data to support or refute my previous thouhgts. I chose soccer data sets as the soccer season is in full swing and mostly enjoyed finding correlations between different variables that were interestint to me and to see the progress or degeneration of teams from this season vs last season.</h1>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

@@ -1,0 +1,126 @@
+---
+title: "Project 1"
+author: "Qustandi Fashho, Qif55"
+date: "10/13/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = "center", warning = F, message = F,
+tidy=TRUE, tidy.opts=list(width.cutoff=60), R.options=list(max.print=100))
+```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+#0. Introduction: I chose to do a comparative analysis between two soccer data sets. One data set contains information about rankings of soccer teams within out of all soccer leagues depending on last year's season and the other shows a prediction on which league will win in their respective league as well as Championship European competitions. Variables included are Soccer league, team, offensive score, defensive score, and the overall soccer index (SPI). The SPI was obtained through ESPN while all other factors are based on last year's season statistics. SPI seems like a good predictor of success. I believe that high success in the previous season will show correlation with success this season in their respective leagues. I chose this topic because I follow soccer religiously and enjoy playing as well. I expect those ranked top over all to be most successful in the UCL champions league and Europa League.
+
+##1.Tidying: Rearranging Wide/Long
+```{r}
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(data.table)
+library(jtools)
+
+install.packages('fivethirtyeightdata', repos = 'https://fivethirtyeightdata.github.io/drat/', type = 'source')
+library(fivethirtyeight)
+library(fivethirtyeightdata)
+spi_global_rankings
+spi_matches
+rankings <- spi_global_rankings
+matches <- spi_matches
+matches
+matches %>% spread(key = "league", value = "importance1" ) 
+matches %>% gather(key= "importance1", value = "league")#Untidied here because my data was already neat
+rankings
+rankings %>% spread(key = "league", value = "rank" )
+rankings %>% gather(key = "rank", value = "league")#Untidied here because my data was already neat
+```
+##used rankings and matches datasets because they were tidied fine and have the variables I need but I did untidy and retidy. My data looks fine and I will be using spi, spi1, spi1, and rank for my numerical variables.
+
+## 2. Joining/Merging 
+```{r}
+left_join(matches, rankings, by = "league")
+soccer_joined <- left_join(matches, rankings, by = "league")
+soccer_joined
+```
+#Here I joined my "matches" dataset with the "rankings" dataset. I joined via the "leagues" variable and I kept the SPI variable as is because that is what I am looking at. I did a left_join without removing any variables because they do not interrupt my data analysis. I chose to do the left_join function because I wanted one tabel that contains its own values along with the common values of the other data set which in this case would be the "league" variable found in both data sets.
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+#3. Wrangling
+```{r}
+library(dplyr)
+soccer_spi_omit <- na.omit(soccer_joined$spi)
+filter(soccer_joined, spi > 80) 
+arrange(soccer_joined, spi)
+arrange(soccer_joined, desc(spi))
+soccer_joined %>% select(league, name, spi, rank )
+soccer_joined %>% mutate(average = (spi1+spi2)/2 )
+soccer <- na.omit(soccer_joined)
+soccersummary <- summarise(soccer, count = n(), mean(soccer$spi), sd(soccer$spi), mad(soccer$spi), var(soccer$spi), max(soccer$spi), min(soccer$spi), median(soccer$spi), first(soccer$spi), last(soccer$spi))
+soccersummary
+soccer %>% group_by(league) %>% top_n(14, spi) %>% summarize(mean(spi))
+soccer %>% group_by(team1) %>% top_n(300, spi) %>%summarize(mean(spi))
+soccer %>% group_by(rank) %>% top_n(300, spi) %>%summarize(mean(spi))
+cor(soccer$spi, soccer$rank)
+install.packages("corrplot",repos = "http://cran.us.r-project.org")
+library("corrplot")
+summary(soccer)
+soccer
+cor_matrix_soccer <-soccer %>% select(spi, rank, spi1, spi2, prev_rank, off, def)
+cor(cor_matrix_soccer)
+```
+#Filter: #An SPI greater than 80 has a much higher chance of advancing to top 5 in their respective leagues as well in the UCL or Europe league.
+#Arrange: A SPI from lowest to least was used here to quantify the lowest ranked teams in the datasets and the least possibility of ranking high in their leagues or in the UCL/Europa Champions league. I also used the descending function as another step that helps identify the highest ranked team with the hughest chance of winnign the leage 
+#Select: Allowed me to view a data set only with columns league, spi, league, and names of the teams. 
+#Mutate: averaged spi1 and spi2 (offense and defense) to see if it averaged to the total spi for the specific team. The higher the spi, the more competitve the team is in placing in their leagues and the champions league.
+#Summary: Using many different function statsitics to get stats for the spi in the soccer joined data set after removing NA. Here it tells me an overall view of SPI data. 
+#Categorical group_by: I used the top 14 leagues and the top 300 teams to group them in alphabetical order with their SPI scores. I also used rank which seems most useful as it ranked the teams from highest to lowest based on spi (non-categorical).
+#Problems. Because I did not use all the variables presented and I was focusing mostly on league, team, spi, and rank I did not need the other variables, but they did nit provide any potential problem because they are not really conflicting.
+#correlation matrix: results shown above closer to positive one is stronger positive correaltion and closer to -1 is stronger negative correlation
+
+#4: Visualizing
+```{r}
+library(ggplot2)
+install.packages("ggcorrplot",repos = "http://cran.us.r-project.org")
+library(ggcorrplot)
+cor(cor_matrix_soccer)
+ggcorrplot(cor(cor_matrix_soccer))
+
+
+ggplot(cor_matrix_soccer, aes(x= soccer$spi,y= soccer$rank, ))+ggtitle("SPI vs Rank of Soccer CLubs")+ labs(x= "SPI", y="Club Ranking")+geom_point(shape = 21, colour = "purple", size = 3)+ scale_x_continuous(lim=c(0,100))+
+  scale_y_continuous(lim=c(0,600))
+
+ggplot(cor_matrix_soccer, aes(x= soccer$spi, y= soccer$prev_rank))+ggtitle("SPI vs Previous Season Rankings")+ labs(x= "SPI", y="Ranking from Last Season")+geom_point(size = 4, colour="deepskyblue")+geom_smooth( colour = "forestgreen", size=2.5)
+
+
+ggplot(cor_matrix_soccer, aes(soccer$spi,soccer$rank, soccer$prev_rank))+
+geom_point(aes(color=log10(spi)), size=3)+
+  scale_color_gradient(low="yellow", high="red")
+
+
+ggplot(cor_matrix_soccer, aes(x= soccer$spi, y= soccer$prev_rank))+ggtitle("SPI vs Previous Season Rankings")+ labs(x= "SPI", y="Ranking from Last Season")+geom_point(size = 4, colour="deepskyblue")+stat_smooth( colour = "forestgreen", size=2.5) ##Same as Line 98 look at this to see just with stat_smooth, sould not find stat="summary"
+
+ggplot(cor_matrix_soccer, aes(x= soccer$rank, y= soccer$prev_rank))+ggtitle("Current vs Previous Season Rankings")+ labs(x= "Current Rank", y="Ranking from Last Season")+geom_point(size = 2, colour="red")+geom_smooth( colour = "yellow", size=2)
+
+```
+#I used a geom_point, geom_smooth, and another geom_point with a color gradient. On the first graph I did spi vs rankings while on the secon graph, I did spi vs previous rankings. As we expected from getting correlation, as SPI increased, the rank number decreased (went up in rank). With a -0.9593863, this is an extremely negative correlation so close to one that it is definetly significant and very correlated. I also compared SPI vs prev_rankings. The teams did not change much from last season to this season. We can tell this because the correlation matrix gives the number of -0.9583536 which is extremely close to this season. Therefore, the graph is very similar with an extreme negative correlation between SPI and previous rankings. I was curious about a graph between current rank vs previous rank, so I plotted that as well, and ofcourse they are almost positive 1 (0.9986052), because it has not changed much so the relationship between previous rank and current rank are linear and significant. My heat plot I used here also used to see the correlation between all my numeric variables. 
+
+#5 Dimensionality Reduction
+```{r}
+set.seed(348)
+kmeans1 <- cor_matrix_soccer %>% kmeans(1)
+kmeans1
+
+kmeansclust <- cor_matrix_soccer %>% mutate(cluster=as.factor(kmeans1$cluster))
+kmeansclust %>% ggplot(aes(spi1, spi2, color=cluster)) + geom_point()+ggtitle("SPI1 vs SPI2 CLustering")
+```
+#I tried to use the PAM clustering function here, however my data was too large for PAM. instead I used kmean and it worked perfectly. I then ggplot and did a cluster betwene spi1 and spi2 (offensive and defensive SPI) and found out that the cluster was just one big cluster as I expected since they are relatively similar. 
+
+#Conclusion: Overall, I did not feel like I could do this project, however, after carefully reviewing the notes and watching parts of the lectures and tutorials, I remembered more than I thought. I enjoyed this project because it gave me the freedom to chose any data I liked and manipulate variables and find data to support or refute my previous thouhgts. I chose soccer data sets as the soccer season is in full swing and mostly enjoyed finding correlations between different variables that were interestint to me and to see the progress or degeneration of teams from this season vs last season. 

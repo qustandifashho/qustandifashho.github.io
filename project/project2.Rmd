@@ -1,0 +1,266 @@
+---
+title: "Project 2"
+author: "Qustandi Fashho, Qif55"
+date: "2020-12-02"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+#0.Introduction and Data Input: Trump approval Polls
+#With our current political climate the dispute of who will become preseident, I wanted to find out how our current president, Donald Trump's approval has been and possible how it affected the 2020 elections, and if these ratings helped predict Joe Biden as the new presindent (Although not fully confirmed yet). My data set includes the pollsters, the grade (weight) of the pollsters, the sample size, and the approval and disapproval rating as well as tracking and multiversion which are the types of surveys. The dataset also includes adjusted ratings, but I could not find information about how they are adjusted, so I will use the normal approvl rating percentage. The are very similar so the results should be similar either way. There are 4,929 observations in this dataset. I will focus on the approve and disapprove variables which are dependent and my grade/weight variables which are the independent variables. 
+```{r}
+library(fivethirtyeight)
+trump <- trump_approval_poll
+head(trump)
+```
+
+
+#1. MANOVA Testing
+```{r}
+library(dplyr)
+library(tidyverse)
+library(rstatix)
+group <- trump$grade #grade is independent
+DVs <- trump %>% select(approve, disapprove) #approve and disapprove are dependent on grade (weight) of pollsters
+sapply(split(DVs,group), mshapiro_test) #all  p-values are less than 0.05 and thus significant and all ssumptions met so, I will contnie with MANOVA testing 
+
+man1<-manova(cbind(approve, disapprove )~grade, data=trump)
+summary(man1)
+summary.aov(man1)
+trump%>%group_by(grade)%>%summarise(mean(approve),mean(disapprove))
+
+
+pairwise.t.test(trump$approve, trump$grade, p.adj = "none") #post-hoc test with bonferroni correction
+pairwise.t.test(trump$disapprove, trump$grade, p.adj = "none")#post-hoc test with bonferroni correction
+
+```
+#Grade (weight) is my indendept variable, and approve and disapprove are my dependent variables. I started off doing a MANOVA which in turn showed a mean difference shown when I ran the code, so I went on to do univariate ANOVA tests and found mean differences between the approve and grade variables with a bonferroni correction to adjust the sit 2.2e-16. For MANOVA, the assumptions are random and independent observations, multivariate dependent varibales, homogeneity, a linear relatioship between dependent variables, not extreme ouliers, and no multicollinearity. I believe my data does meet these standards. 
+
+#2. Randomization Test
+```{r}
+fit<-lm(approve ~ grade + disapprove, data=trump)
+summary(fit)
+fit2<-lm(disapprove ~ grade + approve, data=trump)
+summary(fit2) #These were F statistic but I need mean difference because I am comparing categorical (grade) with numeric varibles (approve or disapprove)
+
+#Mean difference randomization Test
+approve1 <- trump$approve
+disapprove1 <- trump$disapprove
+trump_random<-data.frame(condition=c(rep("approve1"),rep("disapprove1")),grade=c(approve1, disapprove1))
+head(trump_random)
+
+head(trump_random) 
+trump_random%>%group_by(condition)%>%
+  summarize(means=mean(grade))%>%summarize(`mean_diff`=diff(means))
+
+head(perm1<-data.frame(condition=trump_random$condition,grade=sample(trump_random$grade)))
+perm1%>%group_by(condition)%>%
+  summarize(means=mean(grade))%>%summarize(`mean_diff`=diff(means))
+
+head(perm2<-data.frame(condition=trump_random$condition,grade=sample(trump_random$grade))) 
+perm2%>%group_by(condition)%>%
+  summarize(means=mean(grade))%>%summarize(`mean_diff:`=diff(means))
+
+head(perm3<-data.frame(condition=trump_random$condition,grade=sample(trump_random$grade))) 
+perm3%>%group_by(condition)%>%
+  summarize(means=mean(grade))%>%summarize(`mean_diff:`=diff(means))
+
+rand_dist<-vector() #create vector to hold diffs under null hypothesis
+
+for(i in 1:200){
+new<-data.frame(grade=sample(trump_random$grade),condition=trump_random$condition) #scramble columns
+rand_dist[i]<-mean(new[new$condition=="approve1",]$grade)-   
+              mean(new[new$condition=="disapprove1",]$grade)} #compute mean difference (base R)
+rand_dist[i] #mean difference 0.1054575
+{hist(rand_dist,main="Grade vs Approve.Disapprove",ylab="Approval"); abline(v = c(-20, 20),col="red")}
+```
+#I started using an F-statistic but realized that was not the best test to run, so I used a mean difference test because I wanted to know if there was an association between the grade of the pollster (categorical) with the approval and disaproval rating of President Trump. I recieved a mean difference of 0.04693447	which is very small difference so, there is not a stong association between approve and grade. After scrambling 200 times (when I did it 5000 times Rstudio crashed because my dataset has too many observations), I got a mean difference of 0.0739744,which is a bit higher but still not indicating a strong correlation between pollster and approval. The mean difference changed everytime I ran it but all values were low. My Null hypothesis for this was grade of pollster does not have an affect on approval rate of Pres. Donald Trump and my Alternative hypothesis was that the grade of the pollster does have a significant affect on the approval rate of Donald Trump. After getting such low mean differnce values which means low association between pollster grade and approval. Thus, we fail to reject the null hypothesis. I created a plot visualizing the null distribution and it was normal with a slight outlier basrely skewing it left.
+
+#3. Linear Regression Model. 
+```{r}
+#For my resppnse variable, I will use approval with grade (weight) and sample size (Independent variables)
+x<- scale(trump$approve)
+y <- scale(trump$weight)
+y2 <- scale(trump$sample_size)
+sum(x*y)/sum(x^2) #-0.1453468 
+sum(x*y2)/sum(x^2) #0.08588308
+lm(y~x)
+lm(y2~x)
+cor(trump$sample_size, trump$approve) #cor 0.08588308 not much correlation between sample size and approval
+cor(trump$weight, trump$approve) #cor -0.1453468 for grade (weight) and approval
+fit1<- lm(sample_size ~approve, data=trump)
+coef(fit1)
+fit2 <- lm(weight~approve, data=trump)
+coef(fit2)
+lm(trump$approve ~ x*y) #This is for both together. 
+
+#Regression Plot ggplot
+library(interactions)
+trump%>%ggplot(aes(approve, weight))+geom_point()+geom_smooth(method= 'lm', se=F) #Plotted 2 for convenience like suggested in the instructions
+
+#Checking Assumptions
+#Checking linearity and homoskedsaticity
+resids<- lm(y~x, data=trump)$residuals
+resids <-fit$residuals
+ggplot()+geom_histogram(aes(resids), bins=100) #Normal Distribution, meets assumptions
+
+fitted<-lm(y~x, data=trump)$fitted.values
+
+resids<-fit$residuals
+fitvals<-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, color='red')# looks good, meets linearity and homoskesaticity
+
+ggplot()+geom_histogram(aes(resids), bins=100) #Normality is relatively okay. slightly skewed left with some outliers less than -10.
+ggplot()+geom_qq(aes(sample=resids))+geom_qq_line() #Relatively normal (linear)
+#homoskadicity and normality are okay
+
+#Robust Standard Errors
+library(sandwich)
+library(lmtest)
+fit2<- lm(weight~approve, data=trump)
+fit2
+summary(fit2)$coef[,1:2] #uncorrected SE
+coeftest(fit, vcov = vcovHC(fit))[,1:2] #corrected SE
+
+#Proportion of Variation
+summary(fit)
+(sum((trump$approve-mean(trump$approve))^2)-sum(fit$residuals^2))/sum((trump$approve-mean(trump$approve))^2)
+#My model explains 0.8167865 or about 81.68% of the variance.
+```
+#The coefficient estimate values show how much the mean of the dependent variable which is approval in my case, changes with one unit shift of the indepedent variable which is approval in mu case. For mine, theyare all non-zero coefficients that are not very high for some and thus not much change in correlation with each other and others do suggest correlation between variables indicated by their p-values. I will discuss significane of it later as suggested in the instructions. I plotted the regression plot and there seems to be a slight negative correlation between approve and weight. I used weight here, but it is just the numeric value of grade. The higher the grade, the higher the weight. Like the instructions said, I just plotted two of the varibales for convenience. I then checked Linearity and homoskedascity and linearity with my histogram, regression, and a graph for homoskedascity, and it met these assumptions by the graph showing a relatively normal distribution and linearity and homoskedacity with the other 2 graphs. I did all these graphically instead of using a hypothesis test. I then corrected my standard error and and found the proportion of variance that my model explaines is 0.8167865 or 81.67865% which is pretty good.
+
+#4 Regression with Interaction and Bootsrtap SE
+```{r}
+fit3<-lm(weight ~ approve + sample_size, data=trump)# sample_size and approve interaction.
+summary(fit3) #approve = 1.671e-02
+
+#Bootstrapping Residuals
+fit4 <- lm(weight~approve, data=trump)
+resids<- fit4$residuals
+fitted <- fit4$fitted.values
+fit4 #approve = -0.0173
+
+resid_resamp<-replicate(400,{
+new_resids<-sample(resids,replace=TRUE)
+newdat<-trump
+newdat$weight<-fitted+new_resids
+fit5<-lm(weight ~ approve, data = trump)
+coef(fit5) #Itercept = 1.13559926 approve =-0.01729675 
+})
+
+resid_resamp%>%t%>%as.data.frame%>%summarize_all(sd)
+resid_resamp%>%t%>%as.data.frame%>%gather%>%group_by(key)%>%
+summarize(lower=quantile(value,.025), upper=quantile(value,.975))
+```
+#Here I ran the same regression model but with interaction of weight (numeric version of grade), approval, and sample size. Both sample size and approval actually had significant correlation (as seen by p<0.05) with the grade of the pollster whihc I though was quite interesting becuase I was not expecting to find any correlation between the grade of the poll site and the sample size. Both were a neagtive correlation however. Compared with my robust SEs, my bootstrapped SEs, were bascially the same, with them being -0.1729675 for the bootstrapped SE and -0.173 so that is probably the difference in rounding. The normal standard error is  0.01671 which is slightly different. With the p-values being significant (p<0.05) for both approval rate with weight, and sample size with wight indication relationship and correlation same with original SE. 
+
+
+#5. Logistic Regression
+```{r}
+library(tidyverse)
+library(lmtest)
+library(plotROC)
+
+data4<-trump%>%mutate(y=ifelse(tracking=="TRUE",1,0)) #Tracking (Binary)
+data4$tracking<-factor(data4$tracking,levels=c("TRUE","FALSE"))
+head(data4)
+
+data5<-trump%>%mutate(y=ifelse(multiversions=="TRUE",1,0)) #Multiversion (Binary)
+data5$multiversions<-factor(data4$multiversions,levels=c("TRUE","FALSE"))
+head(data5)
+
+fit8<-glm(y~ approve+weight, data=data4, family="binomial")
+coeftest(fit8) #Coefficients here
+
+#Confusion Matrix
+probs<-predict(fit8,type="response")
+table(predict=as.numeric(probs>.5),truth=data4$y)%>%addmargins
+3116/(3116+34) #Sensitivity= 0.9892063 (TPR)
+TPR <-0.9892063
+1361/1779 #Sepcificity = 0.7650365 (TNR)
+TNR <- 0.7650365
+3116/3534 #Precision (PPV)= 0.8817204
+PPV <-0.8817204
+library(plotROC)
+ROCplot<-ggplot(data4)+geom_roc(aes(d=multiversions,m=weight), n.cuts=0)
+ROCplot
+calc_auc(ROCplot) #AUC = 0.7227052 Fair
+
+#GGplot density plot
+data4$prob <-predict(fit8, type= "response")
+data4$am <- as.factor(data4$y)
+ggplot(data4, aes(approve,weight))+geom_jitter(aes(color=am),alpha=.5,size=3)+
+geom_rug(aes(color=am),sides="right")+geom_hline(yintercept=.5)
+
+data4$logit<-predict(fit8,type="link")
+data4%>%ggplot(aes(logit,color=am,fill=am))+geom_density(alpha=.4)+
+theme(legend.position=c(.85,.85))+geom_vline(xintercept=0)+xlab("predictor (logit)")
+
+#ROC Curve Plot and calcuate AUC:
+sens<-function(p,data=data4, y=y) mean(data[data4$y==1,]$prob>p)
+spec<-function(p,data=data4, y=y) mean(data[data4$y==0,]$prob<p)
+sensitivity<-sapply(seq(0,1,.01),sens,data4)
+specificity<-sapply(seq(0,1,.01),spec,data4)
+ROC1<-data.frame(sensitivity,specificity,cutoff=seq(0,1,.01))
+ROC1%>%gather(key,rate,-cutoff)%>%ggplot(aes(cutoff,rate,color=key))+geom_path()+
+geom_vline(xintercept=c(.1,.5,.9),lty=5,color=c("darkgreen","black","purple"))
+
+ROC1$TPR<-sensitivity
+ROC1$FPR<-1-specificity
+
+ROC1%>%ggplot(aes(FPR,TPR))+geom_path(size=1.5)+geom_segment(aes(x=0,y=0,xend=1,yend=1))
+
+widths<-diff(ROC1$FPR) 
+heights<-vector() 
+for(i in 1:100) heights[i]<-ROC1$TPR[i]+ROC1$TPR[i+1]
+AUC<-sum(heights*widths/2) 
+AUC%>%round(8) #AOC= -0.9492794 I assume it should be positive
+```
+#Here, I started with the fitting a logistic regression predicting a binary variable, in which I used my tracking variable which is TRUE when the pollster tracks and polls daily and false when the pollsters do not track daily. My other binary variable that I ran a regression on was "multiversions" which were multiple versions of the poll geared either to adult voters or newer younger voters. My coefficient estimates with tracking and weight with approval were -0.034289 with approval and tracking & weight and tracking was 16.932428 . for approval, for every tracking "yes" there is less of possibility of approval by 0.034289. With weight, when tracking is true (1) the grade (weight) of the pollster goes down 16.932%. After I made the confusion matrix, I got Sensitivity= 0.9892063 which is the probability of approval when the polling tracks (TPR), Sepcificity = 0.7650365 (TNR), which is the probablity of tracking when the outlook was positive and Precision (PPV)= 0.8817204 which is the proportion of true for tracking when it is actually true. The AUC is how well weare predicting approval with tracking overall. For this, it was 0.7227052 which is classified as Fair. I made a density plot of log odds grouped with my binary outcome and that is shown above. Where above 0.5 it is expected to be true for tracking and below 0.5 would be predicted to be false (0). For the ROC plot, let's us vizualize th trade off between sensitivity, so for mine, when the FPR increases, do does TPR until a max at 1. And the area under the curve would be the AUC which was 0.9492794 which is considered Great.
+
+#6. Logistic Regression, LASSO, 10-fold CV
+```{r}
+#Fit Model and Compute diagnostics
+fit9<-glm(y~ approve+weight+disapprove+sample_size, data=data4, family="binomial")
+coeftest(fit9) #Coefficients are here.
+probs2<-predict(fit9,type="response")
+table(predict=as.numeric(probs2>.5),truth=data4$y)%>%addmargins
+3093/(3093+57) #Sensitivity (TPR) =0.9819048
+1540/1779 #Specificity (TNR)= 0.8656549
+3093/3332 #Precision (PPV)= 0.9282713
+
+#10-fold CV
+library(tidyverse)
+library(lmtest)
+library(glmnet)
+y3<-as.matrix(data4$approve)
+x3<-model.matrix(weight~.,data=data4)[-1]
+x4<-scale(x3)
+
+
+set.seed(1234)
+k=10
+data_CV <- data4 %>% sample_frac
+folds <- ntile(1:nrow(data4),n=10) 
+
+
+
+
+
+```
+#cv<-cv.glmnet(x4,y3,family="binomial") #This is not working
+#cv<-cv.glmnet(x4,y3,family="binomial")
+#lasso<-glmnet(x4,y3,family="binomial",lambda=cv$lambda.1se)
+#coef(lasso)
+#I included all this code in the comments section because R would not let me do that. I talked to Dr. Woodward about the error code, and I was reccomended to make sure my matrices were right before proceeding. After spending a long time, I could not find the problem and essential gave up. I wanted to show that at least I know how to run the code and would be explain the 10-Fold CV and the LASSO. However, I did do the first part of which is the logistic binary regression with more varibles as well as computed the classication diagnosis and fit model of the second part. Here I used sample size, disapprove, weight, and tracking related to approval rate. Sensitivity (TPR) =0.9819048 which is the probability of getting have a pollster that does track. The specificity (TNR)= 0.8656549 which is the probability of picking a poll site that does not track and being right. The PPV precision is 0.9282713 which is the proportion of classified tracking that actually track. With our coefficient estimates we can see when the poll does track, there is an increase 4.1249e-01 in approval rating,  -1.4201e+01 decrease in grade (weight) of poll site, increase of 5.2644e-01 in disapproval and -6.0339e-04 decrease in sample size. This is very interesting because seeing that there is an increase for both disapprove and approve when tracking is true is interesting as well as the increase in sample size. All these are significant as well. If my LASSO and 10-fold worked, I would have been able to have seen what the most predictive variables are and how they fare under CV.

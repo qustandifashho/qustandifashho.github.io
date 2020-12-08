@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Qustandi Fashho" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 2</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project2/">Project 2</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         December 2, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="r-markdown" class="section level2">
+<h2>R Markdown</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+</div>
+<div id="introduction-and-data-input-trump-approval-polls" class="section level1">
+<h1>0.Introduction and Data Input: Trump approval Polls</h1>
+</div>
+<div id="with-our-current-political-climate-the-dispute-of-who-will-become-preseident-i-wanted-to-find-out-how-our-current-president-donald-trumps-approval-has-been-and-possible-how-it-affected-the-2020-elections-and-if-these-ratings-helped-predict-joe-biden-as-the-new-presindent-although-not-fully-confirmed-yet.-my-data-set-includes-the-pollsters-the-grade-weight-of-the-pollsters-the-sample-size-and-the-approval-and-disapproval-rating-as-well-as-tracking-and-multiversion-which-are-the-types-of-surveys.-the-dataset-also-includes-adjusted-ratings-but-i-could-not-find-information-about-how-they-are-adjusted-so-i-will-use-the-normal-approvl-rating-percentage.-the-are-very-similar-so-the-results-should-be-similar-either-way.-there-are-4929-observations-in-this-dataset.-i-will-focus-on-the-approve-and-disapprove-variables-which-are-dependent-and-my-gradeweight-variables-which-are-the-independent-variables." class="section level1">
+<h1>With our current political climate the dispute of who will become preseident, I wanted to find out how our current president, Donald Trump's approval has been and possible how it affected the 2020 elections, and if these ratings helped predict Joe Biden as the new presindent (Although not fully confirmed yet). My data set includes the pollsters, the grade (weight) of the pollsters, the sample size, and the approval and disapproval rating as well as tracking and multiversion which are the types of surveys. The dataset also includes adjusted ratings, but I could not find information about how they are adjusted, so I will use the normal approvl rating percentage. The are very similar so the results should be similar either way. There are 4,929 observations in this dataset. I will focus on the approve and disapprove variables which are dependent and my grade/weight variables which are the independent variables.</h1>
+<pre class="r"><code>library(fivethirtyeight)
+trump &lt;- trump_approval_poll
+head(trump)</code></pre>
+<pre><code>##    subgroup start_date   end_date                                 pollster
+## 1 All polls 2017-01-20 2017-01-22                          Morning Consult
+## 2 All polls 2017-01-20 2017-01-22                                   Gallup
+## 3 All polls 2017-01-21 2017-01-23                                   Gallup
+## 4 All polls 2017-01-20 2017-01-24                                    Ipsos
+## 5 All polls 2017-01-22 2017-01-24 Rasmussen Reports/Pulse Opinion Research
+## 6 All polls 2017-01-21 2017-01-25                                    Ipsos
+##   grade sample_size population    weight approve disapprove adjusted_approve
+## 1    B-        1992         rv 0.9464371    46.0       37.0         42.67793
+## 2     B        1500          a 0.2454292    45.0       45.0         46.12215
+## 3     B        1500          a 0.2267880    45.0       46.0         46.12215
+## 4    B+        1632          a 0.2244560    42.1       45.2         42.42070
+## 5    C+        1500         lv 0.2203903    57.0       43.0         51.79590
+## 6    B+        1651          a 0.2099484    42.3       45.8         42.62070
+##   adjusted_disapprove multiversions tracking
+## 1            39.42662         FALSE    FALSE
+## 2            43.05047         FALSE     TRUE
+## 3            44.05047         FALSE     TRUE
+## 4            43.89911         FALSE     TRUE
+## 5            43.44841         FALSE     TRUE
+## 6            44.49911         FALSE     TRUE
+##                                                                                                         url
+## 1                   http://www.politico.com/story/2017/01/poll-voters-liked-trumps-inaugural-address-234148
+## 2                                    http://www.gallup.com/poll/201617/gallup-daily-trump-job-approval.aspx
+## 3                                    http://www.gallup.com/poll/201617/gallup-daily-trump-job-approval.aspx
+## 4                                                                   http://polling.reuters.com/#poll/CP3_2/
+## 5 http://www.rasmussenreports.com/public_content/politics/trump_administration/trump_approval_index_history
+## 6                                                                   http://polling.reuters.com/#poll/CP3_2/
+##   poll_id question_id created_date           timestamp
+## 1   49249       77261   2017-01-23 2018-08-13 14:06:42
+## 2   49253       77265   2017-01-23 2018-08-13 14:06:42
+## 3   49262       77274   2017-01-24 2018-08-13 14:06:42
+## 4   49426       77599   2017-03-01 2018-08-13 14:06:42
+## 5   49266       77278   2017-01-25 2018-08-13 14:06:42
+## 6   49425       77598   2017-03-01 2018-08-13 14:06:42</code></pre>
+</div>
+<div id="manova-testing" class="section level1">
+<h1>1. MANOVA Testing</h1>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ stringr 1.4.0
+## ✓ tidyr   1.1.1     ✓ forcats 0.5.0
+## ✓ readr   1.3.1</code></pre>
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(rstatix)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;rstatix&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre class="r"><code>group &lt;- trump$grade #grade is independent
+DVs &lt;- trump %&gt;% select(approve, disapprove) #approve and disapprove are dependent on grade (weight) of pollsters
+sapply(split(DVs,group), mshapiro_test) #all  p-values are less than 0.05 and thus significant and all ssumptions met so, I will contnie with MANOVA testing </code></pre>
+<pre><code>##           C-          C            C+           B-           B           
+## statistic 0.913848    0.851116     0.8976587    0.930745     0.8952132   
+## p.value   0.004958745 0.0006543618 1.029048e-23 1.851846e-09 2.216067e-28
+##           B+           A-           A          A+         
+## statistic 0.9653398    0.8134553    0.9706647  0.9148765  
+## p.value   7.998741e-20 9.826336e-15 0.04738845 0.001081716</code></pre>
+<pre class="r"><code>man1&lt;-manova(cbind(approve, disapprove )~grade, data=trump)
+summary(man1)</code></pre>
+<pre><code>##             Df  Pillai approx F num Df den Df    Pr(&gt;F)    
+## grade        8 0.61377   248.56     16   8982 &lt; 2.2e-16 ***
+## Residuals 4491                                             
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary.aov(man1)</code></pre>
+<pre><code>##  Response approve :
+##               Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## grade          8  23363 2920.44  261.41 &lt; 2.2e-16 ***
+## Residuals   4491  50172   11.17                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##  Response disapprove :
+##               Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## grade          8   4058  507.22  40.861 &lt; 2.2e-16 ***
+## Residuals   4491  55748   12.41                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## 429 observations deleted due to missingness</code></pre>
+<pre class="r"><code>trump%&gt;%group_by(grade)%&gt;%summarise(mean(approve),mean(disapprove))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 10 x 3
+##    grade `mean(approve)` `mean(disapprove)`
+##    &lt;ord&gt;           &lt;dbl&gt;              &lt;dbl&gt;
+##  1 C-               46.2               50.9
+##  2 C                43.1               51.2
+##  3 C+               45.5               53.3
+##  4 B-               42.2               51.5
+##  5 B                39.5               53.9
+##  6 B+               40.7               54.8
+##  7 A-               38.5               55.1
+##  8 A                40.4               52.3
+##  9 A+               39.9               53.1
+## 10 &lt;NA&gt;             41.4               56.6</code></pre>
+<pre class="r"><code>pairwise.t.test(trump$approve, trump$grade, p.adj = &quot;none&quot;) #post-hoc test with bonferroni correction</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  trump$approve and trump$grade 
+## 
+##    C-      C       C+      B-      B       B+      A-      A      
+## C  8.6e-05 -       -       -       -       -       -       -      
+## C+ 0.19704 6.7e-05 -       -       -       -       -       -      
+## B- 1.8e-12 0.18950 &lt; 2e-16 -       -       -       -       -      
+## B  &lt; 2e-16 1.1e-08 &lt; 2e-16 &lt; 2e-16 -       -       -       -      
+## B+ &lt; 2e-16 0.00013 &lt; 2e-16 2.5e-11 &lt; 2e-16 -       -       -      
+## A- &lt; 2e-16 2.5e-12 &lt; 2e-16 &lt; 2e-16 3.3e-05 &lt; 2e-16 -       -      
+## A  &lt; 2e-16 0.00019 &lt; 2e-16 1.7e-05 0.01691 0.43291 6.3e-06 -      
+## A+ &lt; 2e-16 2.9e-05 &lt; 2e-16 3.4e-06 0.46879 0.07150 0.00681 0.34550
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(trump$disapprove, trump$grade, p.adj = &quot;none&quot;)#post-hoc test with bonferroni correction</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  trump$disapprove and trump$grade 
+## 
+##    C-      C       C+      B-      B       B+      A-      A      
+## C  0.69528 -       -       -       -       -       -       -      
+## C+ 1.8e-05 0.00124 -       -       -       -       -       -      
+## B- 0.25185 0.60293 3.5e-12 -       -       -       -       -      
+## B  7.4e-08 3.1e-05 0.00010 &lt; 2e-16 -       -       -       -      
+## B+ 5.1e-12 4.1e-08 &lt; 2e-16 &lt; 2e-16 9.6e-11 -       -       -      
+## A- 6.7e-12 2.2e-08 2.4e-10 &lt; 2e-16 1.8e-05 0.25460 -       -      
+## A  0.02979 0.12970 0.01376 0.07718 5.6e-05 4.4e-10 1.9e-09 -      
+## A+ 0.00248 0.01824 0.67000 0.00370 0.09891 0.00071 0.00031 0.21156
+## 
+## P value adjustment method: none</code></pre>
+</div>
+<div id="grade-weight-is-my-indendept-variable-and-approve-and-disapprove-are-my-dependent-variables.-i-started-off-doing-a-manova-which-in-turn-showed-a-mean-difference-shown-when-i-ran-the-code-so-i-went-on-to-do-univariate-anova-tests-and-found-mean-differences-between-the-approve-and-grade-variables-with-a-bonferroni-correction-to-adjust-the-sit-2.2e-16.-for-manova-the-assumptions-are-random-and-independent-observations-multivariate-dependent-varibales-homogeneity-a-linear-relatioship-between-dependent-variables-not-extreme-ouliers-and-no-multicollinearity.-i-believe-my-data-does-meet-these-standards." class="section level1">
+<h1>Grade (weight) is my indendept variable, and approve and disapprove are my dependent variables. I started off doing a MANOVA which in turn showed a mean difference shown when I ran the code, so I went on to do univariate ANOVA tests and found mean differences between the approve and grade variables with a bonferroni correction to adjust the sit 2.2e-16. For MANOVA, the assumptions are random and independent observations, multivariate dependent varibales, homogeneity, a linear relatioship between dependent variables, not extreme ouliers, and no multicollinearity. I believe my data does meet these standards.</h1>
+</div>
+<div id="randomization-test" class="section level1">
+<h1>2. Randomization Test</h1>
+<pre class="r"><code>fit&lt;-lm(approve ~ grade + disapprove, data=trump)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = approve ~ grade + disapprove, data = trump)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -13.5474  -0.9446   0.1515   1.1318   6.1606 
+## 
+## Coefficients:
+##              Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept) 83.796540   0.414560  202.134  &lt; 2e-16 ***
+## grade.L     -4.383713   0.252222  -17.380  &lt; 2e-16 ***
+## grade.Q      0.570774   0.216482    2.637  0.00840 ** 
+## grade.C      0.392675   0.203128    1.933  0.05328 .  
+## grade^4     -0.017838   0.223042   -0.080  0.93626    
+## grade^5     -0.578248   0.217573   -2.658  0.00789 ** 
+## grade^6      2.696159   0.169760   15.882  &lt; 2e-16 ***
+## grade^7     -3.010942   0.121219  -24.839  &lt; 2e-16 ***
+## grade^8     -0.023793   0.082606   -0.288  0.77333    
+## disapprove  -0.794247   0.007742 -102.584  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.828 on 4490 degrees of freedom
+##   (429 observations deleted due to missingness)
+## Multiple R-squared:  0.796,  Adjusted R-squared:  0.7955 
+## F-statistic:  1946 on 9 and 4490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>fit2&lt;-lm(disapprove ~ grade + approve, data=trump)
+summary(fit2) #These were F statistic but I need mean difference because I am comparing categorical (grade) with numeric varibles (approve or disapprove)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = disapprove ~ grade + approve, data = trump)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.6110  -0.8128   0.2715   1.2524   5.9639 
+## 
+## Coefficients:
+##              Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept) 89.770856   0.365810  245.403  &lt; 2e-16 ***
+## grade.L     -3.133066   0.270657  -11.576  &lt; 2e-16 ***
+## grade.Q     -0.160887   0.228359   -0.705 0.481135    
+## grade.C      0.077069   0.214204    0.360 0.719018    
+## grade^4      0.095030   0.235105    0.404 0.686082    
+## grade^5     -0.062281   0.229522   -0.271 0.786133    
+## grade^6      2.837605   0.178960   15.856  &lt; 2e-16 ***
+## grade^7     -2.912344   0.129157  -22.549  &lt; 2e-16 ***
+## grade^8      0.323139   0.086942    3.717 0.000204 ***
+## approve     -0.882515   0.008603 -102.584  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.927 on 4490 degrees of freedom
+##   (429 observations deleted due to missingness)
+## Multiple R-squared:  0.7212, Adjusted R-squared:  0.7207 
+## F-statistic:  1291 on 9 and 4490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>#Mean difference randomization Test
+approve1 &lt;- trump$approve
+disapprove1 &lt;- trump$disapprove
+trump_random&lt;-data.frame(condition=c(rep(&quot;approve1&quot;),rep(&quot;disapprove1&quot;)),grade=c(approve1, disapprove1))
+head(trump_random)</code></pre>
+<pre><code>##     condition grade
+## 1    approve1  46.0
+## 2 disapprove1  45.0
+## 3    approve1  45.0
+## 4 disapprove1  42.1
+## 5    approve1  57.0
+## 6 disapprove1  42.3</code></pre>
+<pre class="r"><code>head(trump_random) </code></pre>
+<pre><code>##     condition grade
+## 1    approve1  46.0
+## 2 disapprove1  45.0
+## 3    approve1  45.0
+## 4 disapprove1  42.1
+## 5    approve1  57.0
+## 6 disapprove1  42.3</code></pre>
+<pre class="r"><code>trump_random%&gt;%group_by(condition)%&gt;%
+  summarize(means=mean(grade))%&gt;%summarize(`mean_diff`=diff(means))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   mean_diff
+##       &lt;dbl&gt;
+## 1   -0.0469</code></pre>
+<pre class="r"><code>head(perm1&lt;-data.frame(condition=trump_random$condition,grade=sample(trump_random$grade)))</code></pre>
+<pre><code>##     condition grade
+## 1    approve1  59.8
+## 2 disapprove1  40.7
+## 3    approve1  37.0
+## 4 disapprove1  40.2
+## 5    approve1  40.0
+## 6 disapprove1  55.0</code></pre>
+<pre class="r"><code>perm1%&gt;%group_by(condition)%&gt;%
+  summarize(means=mean(grade))%&gt;%summarize(`mean_diff`=diff(means))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   mean_diff
+##       &lt;dbl&gt;
+## 1    -0.272</code></pre>
+<pre class="r"><code>head(perm2&lt;-data.frame(condition=trump_random$condition,grade=sample(trump_random$grade))) </code></pre>
+<pre><code>##     condition grade
+## 1    approve1 55.50
+## 2 disapprove1 36.90
+## 3    approve1 47.50
+## 4 disapprove1 53.38
+## 5    approve1 52.00
+## 6 disapprove1 39.60</code></pre>
+<pre class="r"><code>perm2%&gt;%group_by(condition)%&gt;%
+  summarize(means=mean(grade))%&gt;%summarize(`mean_diff:`=diff(means))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `mean_diff:`
+##          &lt;dbl&gt;
+## 1      -0.0768</code></pre>
+<pre class="r"><code>head(perm3&lt;-data.frame(condition=trump_random$condition,grade=sample(trump_random$grade))) </code></pre>
+<pre><code>##     condition grade
+## 1    approve1    46
+## 2 disapprove1    57
+## 3    approve1    56
+## 4 disapprove1    39
+## 5    approve1    52
+## 6 disapprove1    55</code></pre>
+<pre class="r"><code>perm3%&gt;%group_by(condition)%&gt;%
+  summarize(means=mean(grade))%&gt;%summarize(`mean_diff:`=diff(means))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `mean_diff:`
+##          &lt;dbl&gt;
+## 1      -0.0918</code></pre>
+<pre class="r"><code>rand_dist&lt;-vector() #create vector to hold diffs under null hypothesis
+
+for(i in 1:200){
+new&lt;-data.frame(grade=sample(trump_random$grade),condition=trump_random$condition) #scramble columns
+rand_dist[i]&lt;-mean(new[new$condition==&quot;approve1&quot;,]$grade)-   
+              mean(new[new$condition==&quot;disapprove1&quot;,]$grade)} #compute mean difference (base R)
+rand_dist[i] #mean difference 0.1054575</code></pre>
+<pre><code>## [1] -0.1495354</code></pre>
+<pre class="r"><code>{hist(rand_dist,main=&quot;Grade vs Approve.Disapprove&quot;,ylab=&quot;Approval&quot;); abline(v = c(-20, 20),col=&quot;red&quot;)}</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-1.png" width="672" /> #I started using an F-statistic but realized that was not the best test to run, so I used a mean difference test because I wanted to know if there was an association between the grade of the pollster (categorical) with the approval and disaproval rating of President Trump. I recieved a mean difference of 0.04693447 which is very small difference so, there is not a stong association between approve and grade. After scrambling 200 times (when I did it 5000 times Rstudio crashed because my dataset has too many observations), I got a mean difference of 0.0739744,which is a bit higher but still not indicating a strong correlation between pollster and approval. The mean difference changed everytime I ran it but all values were low. My Null hypothesis for this was grade of pollster does not have an affect on approval rate of Pres. Donald Trump and my Alternative hypothesis was that the grade of the pollster does have a significant affect on the approval rate of Donald Trump. After getting such low mean differnce values which means low association between pollster grade and approval. Thus, we fail to reject the null hypothesis. I created a plot visualizing the null distribution and it was normal with a slight outlier basrely skewing it left.</p>
+</div>
+<div id="linear-regression-model." class="section level1">
+<h1>3. Linear Regression Model.</h1>
+<pre class="r"><code>#For my resppnse variable, I will use approval with grade (weight) and sample size (Independent variables)
+x&lt;- scale(trump$approve)
+y &lt;- scale(trump$weight)
+y2 &lt;- scale(trump$sample_size)
+sum(x*y)/sum(x^2) #-0.1453468 </code></pre>
+<pre><code>## [1] -0.1453468</code></pre>
+<pre class="r"><code>sum(x*y2)/sum(x^2) #0.08588308</code></pre>
+<pre><code>## [1] 0.08588308</code></pre>
+<pre class="r"><code>lm(y~x)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x)
+## 
+## Coefficients:
+## (Intercept)            x  
+##   1.457e-16   -1.453e-01</code></pre>
+<pre class="r"><code>lm(y2~x)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y2 ~ x)
+## 
+## Coefficients:
+## (Intercept)            x  
+##   1.728e-17    8.588e-02</code></pre>
+<pre class="r"><code>cor(trump$sample_size, trump$approve) #cor 0.08588308 not much correlation between sample size and approval</code></pre>
+<pre><code>## [1] 0.08588308</code></pre>
+<pre class="r"><code>cor(trump$weight, trump$approve) #cor -0.1453468 for grade (weight) and approval</code></pre>
+<pre><code>## [1] -0.1453468</code></pre>
+<pre class="r"><code>fit1&lt;- lm(sample_size ~approve, data=trump)
+coef(fit1)</code></pre>
+<pre><code>## (Intercept)     approve 
+##  -624.46560    66.16692</code></pre>
+<pre class="r"><code>fit2 &lt;- lm(weight~approve, data=trump)
+coef(fit2)</code></pre>
+<pre><code>## (Intercept)     approve 
+##  1.13559926 -0.01729675</code></pre>
+<pre class="r"><code>lm(trump$approve ~ x*y) #This is for both together. </code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = trump$approve ~ x * y)
+## 
+## Coefficients:
+## (Intercept)            x            y          x:y  
+##   4.136e+01    4.077e+00    7.380e-15    8.608e-15</code></pre>
+<pre class="r"><code>#Regression Plot ggplot
+library(interactions)
+trump%&gt;%ggplot(aes(approve, weight))+geom_point()+geom_smooth(method= &#39;lm&#39;, se=F) #Plotted 2 for convenience like suggested in the instructions</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>#Checking Assumptions
+#Checking linearity and homoskedsaticity
+resids&lt;- lm(y~x, data=trump)$residuals
+resids &lt;-fit$residuals
+ggplot()+geom_histogram(aes(resids), bins=100) #Normal Distribution, meets assumptions</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>fitted&lt;-lm(y~x, data=trump)$fitted.values
+
+resids&lt;-fit$residuals
+fitvals&lt;-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, color=&#39;red&#39;)# looks good, meets linearity and homoskesaticity</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<pre class="r"><code>ggplot()+geom_histogram(aes(resids), bins=100) #Normality is relatively okay. slightly skewed left with some outliers less than -10.</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-4.png" width="672" /></p>
+<pre class="r"><code>ggplot()+geom_qq(aes(sample=resids))+geom_qq_line() #Relatively normal (linear)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-5.png" width="672" /></p>
+<pre class="r"><code>#homoskadicity and normality are okay
+
+#Robust Standard Errors
+library(sandwich)
+library(lmtest)</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre class="r"><code>fit2&lt;- lm(weight~approve, data=trump)
+fit2</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = weight ~ approve, data = trump)
+## 
+## Coefficients:
+## (Intercept)      approve  
+##      1.1356      -0.0173</code></pre>
+<pre class="r"><code>summary(fit2)$coef[,1:2] #uncorrected SE</code></pre>
+<pre><code>##                Estimate  Std. Error
+## (Intercept)  1.13559926 0.069707885
+## approve     -0.01729675 0.001677378</code></pre>
+<pre class="r"><code>coeftest(fit, vcov = vcovHC(fit))[,1:2] #corrected SE</code></pre>
+<pre><code>##                Estimate Std. Error
+## (Intercept) 83.79653986 0.62573146
+## grade.L     -4.38371273 0.33979365
+## grade.Q      0.57077359 0.23467721
+## grade.C      0.39267465 0.24536828
+## grade^4     -0.01783790 0.35677936
+## grade^5     -0.57824807 0.37712734
+## grade^6      2.69615917 0.28471673
+## grade^7     -3.01094189 0.18988462
+## grade^8     -0.02379344 0.12578179
+## disapprove  -0.79424678 0.01155083</code></pre>
+<pre class="r"><code>#Proportion of Variation
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = approve ~ grade + disapprove, data = trump)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -13.5474  -0.9446   0.1515   1.1318   6.1606 
+## 
+## Coefficients:
+##              Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept) 83.796540   0.414560  202.134  &lt; 2e-16 ***
+## grade.L     -4.383713   0.252222  -17.380  &lt; 2e-16 ***
+## grade.Q      0.570774   0.216482    2.637  0.00840 ** 
+## grade.C      0.392675   0.203128    1.933  0.05328 .  
+## grade^4     -0.017838   0.223042   -0.080  0.93626    
+## grade^5     -0.578248   0.217573   -2.658  0.00789 ** 
+## grade^6      2.696159   0.169760   15.882  &lt; 2e-16 ***
+## grade^7     -3.010942   0.121219  -24.839  &lt; 2e-16 ***
+## grade^8     -0.023793   0.082606   -0.288  0.77333    
+## disapprove  -0.794247   0.007742 -102.584  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.828 on 4490 degrees of freedom
+##   (429 observations deleted due to missingness)
+## Multiple R-squared:  0.796,  Adjusted R-squared:  0.7955 
+## F-statistic:  1946 on 9 and 4490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>(sum((trump$approve-mean(trump$approve))^2)-sum(fit$residuals^2))/sum((trump$approve-mean(trump$approve))^2)</code></pre>
+<pre><code>## [1] 0.8167865</code></pre>
+<pre class="r"><code>#My model explains 0.8167865 or about 81.68% of the variance.</code></pre>
+</div>
+<div id="the-coefficient-estimate-values-show-how-much-the-mean-of-the-dependent-variable-which-is-approval-in-my-case-changes-with-one-unit-shift-of-the-indepedent-variable-which-is-approval-in-mu-case.-for-mine-theyare-all-non-zero-coefficients-that-are-not-very-high-for-some-and-thus-not-much-change-in-correlation-with-each-other-and-others-do-suggest-correlation-between-variables-indicated-by-their-p-values.-i-will-discuss-significane-of-it-later-as-suggested-in-the-instructions.-i-plotted-the-regression-plot-and-there-seems-to-be-a-slight-negative-correlation-between-approve-and-weight.-i-used-weight-here-but-it-is-just-the-numeric-value-of-grade.-the-higher-the-grade-the-higher-the-weight.-like-the-instructions-said-i-just-plotted-two-of-the-varibales-for-convenience.-i-then-checked-linearity-and-homoskedascity-and-linearity-with-my-histogram-regression-and-a-graph-for-homoskedascity-and-it-met-these-assumptions-by-the-graph-showing-a-relatively-normal-distribution-and-linearity-and-homoskedacity-with-the-other-2-graphs.-i-did-all-these-graphically-instead-of-using-a-hypothesis-test.-i-then-corrected-my-standard-error-and-and-found-the-proportion-of-variance-that-my-model-explaines-is-0.8167865-or-81.67865-which-is-pretty-good." class="section level1">
+<h1>The coefficient estimate values show how much the mean of the dependent variable which is approval in my case, changes with one unit shift of the indepedent variable which is approval in mu case. For mine, theyare all non-zero coefficients that are not very high for some and thus not much change in correlation with each other and others do suggest correlation between variables indicated by their p-values. I will discuss significane of it later as suggested in the instructions. I plotted the regression plot and there seems to be a slight negative correlation between approve and weight. I used weight here, but it is just the numeric value of grade. The higher the grade, the higher the weight. Like the instructions said, I just plotted two of the varibales for convenience. I then checked Linearity and homoskedascity and linearity with my histogram, regression, and a graph for homoskedascity, and it met these assumptions by the graph showing a relatively normal distribution and linearity and homoskedacity with the other 2 graphs. I did all these graphically instead of using a hypothesis test. I then corrected my standard error and and found the proportion of variance that my model explaines is 0.8167865 or 81.67865% which is pretty good.</h1>
+</div>
+<div id="regression-with-interaction-and-bootsrtap-se" class="section level1">
+<h1>4 Regression with Interaction and Bootsrtap SE</h1>
+<pre class="r"><code>fit3&lt;-lm(weight ~ approve + sample_size, data=trump)# sample_size and approve interaction.
+summary(fit3) #approve = 1.671e-02</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = weight ~ approve + sample_size, data = trump)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.4613 -0.3006 -0.2167  0.1128  2.4202 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.130e+00  6.961e-02  16.234  &lt; 2e-16 ***
+## approve     -1.671e-02  1.681e-03  -9.941  &lt; 2e-16 ***
+## sample_size -8.863e-06  2.182e-06  -4.062 4.94e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4793 on 4926 degrees of freedom
+## Multiple R-squared:  0.02439,    Adjusted R-squared:  0.024 
+## F-statistic: 61.58 on 2 and 4926 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>#Bootstrapping Residuals
+fit4 &lt;- lm(weight~approve, data=trump)
+resids&lt;- fit4$residuals
+fitted &lt;- fit4$fitted.values
+fit4 #approve = -0.0173</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = weight ~ approve, data = trump)
+## 
+## Coefficients:
+## (Intercept)      approve  
+##      1.1356      -0.0173</code></pre>
+<pre class="r"><code>resid_resamp&lt;-replicate(400,{
+new_resids&lt;-sample(resids,replace=TRUE)
+newdat&lt;-trump
+newdat$weight&lt;-fitted+new_resids
+fit5&lt;-lm(weight ~ approve, data = trump)
+coef(fit5) #Itercept = 1.13559926 approve =-0.01729675 
+})
+
+resid_resamp%&gt;%t%&gt;%as.data.frame%&gt;%summarize_all(sd)</code></pre>
+<pre><code>##   (Intercept) approve
+## 1           0       0</code></pre>
+<pre class="r"><code>resid_resamp%&gt;%t%&gt;%as.data.frame%&gt;%gather%&gt;%group_by(key)%&gt;%
+summarize(lower=quantile(value,.025), upper=quantile(value,.975))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   key           lower   upper
+##   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  1.14    1.14  
+## 2 approve     -0.0173 -0.0173</code></pre>
+</div>
+<div id="here-i-ran-the-same-regression-model-but-with-interaction-of-weight-numeric-version-of-grade-approval-and-sample-size.-both-sample-size-and-approval-actually-had-significant-correlation-as-seen-by-p0.05-with-the-grade-of-the-pollster-whihc-i-though-was-quite-interesting-becuase-i-was-not-expecting-to-find-any-correlation-between-the-grade-of-the-poll-site-and-the-sample-size.-both-were-a-neagtive-correlation-however.-compared-with-my-robust-ses-my-bootstrapped-ses-were-bascially-the-same-with-them-being--0.1729675-for-the-bootstrapped-se-and--0.173-so-that-is-probably-the-difference-in-rounding.-the-normal-standard-error-is-0.01671-which-is-slightly-different.-with-the-p-values-being-significant-p0.05-for-both-approval-rate-with-weight-and-sample-size-with-wight-indication-relationship-and-correlation-same-with-original-se." class="section level1">
+<h1>Here I ran the same regression model but with interaction of weight (numeric version of grade), approval, and sample size. Both sample size and approval actually had significant correlation (as seen by p&lt;0.05) with the grade of the pollster whihc I though was quite interesting becuase I was not expecting to find any correlation between the grade of the poll site and the sample size. Both were a neagtive correlation however. Compared with my robust SEs, my bootstrapped SEs, were bascially the same, with them being -0.1729675 for the bootstrapped SE and -0.173 so that is probably the difference in rounding. The normal standard error is 0.01671 which is slightly different. With the p-values being significant (p&lt;0.05) for both approval rate with weight, and sample size with wight indication relationship and correlation same with original SE.</h1>
+</div>
+<div id="logistic-regression" class="section level1">
+<h1>5. Logistic Regression</h1>
+<pre class="r"><code>library(tidyverse)
+library(lmtest)
+library(plotROC)
+
+data4&lt;-trump%&gt;%mutate(y=ifelse(tracking==&quot;TRUE&quot;,1,0)) #Tracking (Binary)
+data4$tracking&lt;-factor(data4$tracking,levels=c(&quot;TRUE&quot;,&quot;FALSE&quot;))
+head(data4)</code></pre>
+<pre><code>## # A tibble: 6 x 20
+##   subgroup start_date end_date   pollster grade sample_size population weight
+##   &lt;fct&gt;    &lt;date&gt;     &lt;date&gt;     &lt;fct&gt;    &lt;ord&gt;       &lt;int&gt; &lt;fct&gt;       &lt;dbl&gt;
+## 1 All pol… 2017-01-20 2017-01-22 Morning… B-           1992 rv          0.946
+## 2 All pol… 2017-01-20 2017-01-22 Gallup   B            1500 a           0.245
+## 3 All pol… 2017-01-21 2017-01-23 Gallup   B            1500 a           0.227
+## 4 All pol… 2017-01-20 2017-01-24 Ipsos    B+           1632 a           0.224
+## 5 All pol… 2017-01-22 2017-01-24 Rasmuss… C+           1500 lv          0.220
+## 6 All pol… 2017-01-21 2017-01-25 Ipsos    B+           1651 a           0.210
+## # … with 12 more variables: approve &lt;dbl&gt;, disapprove &lt;dbl&gt;,
+## #   adjusted_approve &lt;dbl&gt;, adjusted_disapprove &lt;dbl&gt;, multiversions &lt;lgl&gt;,
+## #   tracking &lt;fct&gt;, url &lt;fct&gt;, poll_id &lt;int&gt;, question_id &lt;int&gt;,
+## #   created_date &lt;date&gt;, timestamp &lt;dttm&gt;, y &lt;dbl&gt;</code></pre>
+<pre class="r"><code>data5&lt;-trump%&gt;%mutate(y=ifelse(multiversions==&quot;TRUE&quot;,1,0)) #Multiversion (Binary)
+data5$multiversions&lt;-factor(data4$multiversions,levels=c(&quot;TRUE&quot;,&quot;FALSE&quot;))
+head(data5)</code></pre>
+<pre><code>## # A tibble: 6 x 20
+##   subgroup start_date end_date   pollster grade sample_size population weight
+##   &lt;fct&gt;    &lt;date&gt;     &lt;date&gt;     &lt;fct&gt;    &lt;ord&gt;       &lt;int&gt; &lt;fct&gt;       &lt;dbl&gt;
+## 1 All pol… 2017-01-20 2017-01-22 Morning… B-           1992 rv          0.946
+## 2 All pol… 2017-01-20 2017-01-22 Gallup   B            1500 a           0.245
+## 3 All pol… 2017-01-21 2017-01-23 Gallup   B            1500 a           0.227
+## 4 All pol… 2017-01-20 2017-01-24 Ipsos    B+           1632 a           0.224
+## 5 All pol… 2017-01-22 2017-01-24 Rasmuss… C+           1500 lv          0.220
+## 6 All pol… 2017-01-21 2017-01-25 Ipsos    B+           1651 a           0.210
+## # … with 12 more variables: approve &lt;dbl&gt;, disapprove &lt;dbl&gt;,
+## #   adjusted_approve &lt;dbl&gt;, adjusted_disapprove &lt;dbl&gt;, multiversions &lt;fct&gt;,
+## #   tracking &lt;lgl&gt;, url &lt;fct&gt;, poll_id &lt;int&gt;, question_id &lt;int&gt;,
+## #   created_date &lt;date&gt;, timestamp &lt;dttm&gt;, y &lt;dbl&gt;</code></pre>
+<pre class="r"><code>fit8&lt;-glm(y~ approve+weight, data=data4, family=&quot;binomial&quot;)</code></pre>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre class="r"><code>coeftest(fit8) #Coefficients here</code></pre>
+<pre><code>## 
+## z test of coefficients:
+## 
+##               Estimate Std. Error  z value  Pr(&gt;|z|)    
+## (Intercept)   6.381672   0.567814  11.2390 &lt; 2.2e-16 ***
+## approve      -0.034289   0.013042  -2.6292  0.008559 ** 
+## weight      -16.932428   0.790079 -21.4313 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>#Confusion Matrix
+probs&lt;-predict(fit8,type=&quot;response&quot;)
+table(predict=as.numeric(probs&gt;.5),truth=data4$y)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict    0    1  Sum
+##     0   1361   34 1395
+##     1    418 3116 3534
+##     Sum 1779 3150 4929</code></pre>
+<pre class="r"><code>3116/(3116+34) #Sensitivity= 0.9892063 (TPR)</code></pre>
+<pre><code>## [1] 0.9892063</code></pre>
+<pre class="r"><code>TPR &lt;-0.9892063
+1361/1779 #Sepcificity = 0.7650365 (TNR)</code></pre>
+<pre><code>## [1] 0.7650365</code></pre>
+<pre class="r"><code>TNR &lt;- 0.7650365
+3116/3534 #Precision (PPV)= 0.8817204</code></pre>
+<pre><code>## [1] 0.8817204</code></pre>
+<pre class="r"><code>PPV &lt;-0.8817204
+library(plotROC)
+ROCplot&lt;-ggplot(data4)+geom_roc(aes(d=multiversions,m=weight), n.cuts=0)
+ROCplot</code></pre>
+<pre><code>## Warning in verify_d(data$d): D not labeled 0/1, assuming FALSE = 0 and TRUE = 1!</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>calc_auc(ROCplot) #AUC = 0.7227052 Fair</code></pre>
+<pre><code>## Warning in verify_d(data$d): D not labeled 0/1, assuming FALSE = 0 and TRUE = 1!</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.7227052</code></pre>
+<pre class="r"><code>#GGplot density plot
+data4$prob &lt;-predict(fit8, type= &quot;response&quot;)
+data4$am &lt;- as.factor(data4$y)
+ggplot(data4, aes(approve,weight))+geom_jitter(aes(color=am),alpha=.5,size=3)+
+geom_rug(aes(color=am),sides=&quot;right&quot;)+geom_hline(yintercept=.5)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<pre class="r"><code>data4$logit&lt;-predict(fit8,type=&quot;link&quot;)
+data4%&gt;%ggplot(aes(logit,color=am,fill=am))+geom_density(alpha=.4)+
+theme(legend.position=c(.85,.85))+geom_vline(xintercept=0)+xlab(&quot;predictor (logit)&quot;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
+<pre class="r"><code>#ROC Curve Plot and calcuate AUC:
+sens&lt;-function(p,data=data4, y=y) mean(data[data4$y==1,]$prob&gt;p)
+spec&lt;-function(p,data=data4, y=y) mean(data[data4$y==0,]$prob&lt;p)
+sensitivity&lt;-sapply(seq(0,1,.01),sens,data4)
+specificity&lt;-sapply(seq(0,1,.01),spec,data4)
+ROC1&lt;-data.frame(sensitivity,specificity,cutoff=seq(0,1,.01))
+ROC1%&gt;%gather(key,rate,-cutoff)%&gt;%ggplot(aes(cutoff,rate,color=key))+geom_path()+
+geom_vline(xintercept=c(.1,.5,.9),lty=5,color=c(&quot;darkgreen&quot;,&quot;black&quot;,&quot;purple&quot;))</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-6-4.png" width="672" /></p>
+<pre class="r"><code>ROC1$TPR&lt;-sensitivity
+ROC1$FPR&lt;-1-specificity
+
+ROC1%&gt;%ggplot(aes(FPR,TPR))+geom_path(size=1.5)+geom_segment(aes(x=0,y=0,xend=1,yend=1))</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-6-5.png" width="672" /></p>
+<pre class="r"><code>widths&lt;-diff(ROC1$FPR) 
+heights&lt;-vector() 
+for(i in 1:100) heights[i]&lt;-ROC1$TPR[i]+ROC1$TPR[i+1]
+AUC&lt;-sum(heights*widths/2) 
+AUC%&gt;%round(8) #AOC= -0.9492794 I assume it should be positive</code></pre>
+<pre><code>## [1] -0.9492794</code></pre>
+</div>
+<div id="here-i-started-with-the-fitting-a-logistic-regression-predicting-a-binary-variable-in-which-i-used-my-tracking-variable-which-is-true-when-the-pollster-tracks-and-polls-daily-and-false-when-the-pollsters-do-not-track-daily.-my-other-binary-variable-that-i-ran-a-regression-on-was-multiversions-which-were-multiple-versions-of-the-poll-geared-either-to-adult-voters-or-newer-younger-voters.-my-coefficient-estimates-with-tracking-and-weight-with-approval-were--0.034289-with-approval-and-tracking-weight-and-tracking-was-16.932428-.-for-approval-for-every-tracking-yes-there-is-less-of-possibility-of-approval-by-0.034289.-with-weight-when-tracking-is-true-1-the-grade-weight-of-the-pollster-goes-down-16.932.-after-i-made-the-confusion-matrix-i-got-sensitivity-0.9892063-which-is-the-probability-of-approval-when-the-polling-tracks-tpr-sepcificity-0.7650365-tnr-which-is-the-probablity-of-tracking-when-the-outlook-was-positive-and-precision-ppv-0.8817204-which-is-the-proportion-of-true-for-tracking-when-it-is-actually-true.-the-auc-is-how-well-weare-predicting-approval-with-tracking-overall.-for-this-it-was-0.7227052-which-is-classified-as-fair.-i-made-a-density-plot-of-log-odds-grouped-with-my-binary-outcome-and-that-is-shown-above.-where-above-0.5-it-is-expected-to-be-true-for-tracking-and-below-0.5-would-be-predicted-to-be-false-0.-for-the-roc-plot-lets-us-vizualize-th-trade-off-between-sensitivity-so-for-mine-when-the-fpr-increases-do-does-tpr-until-a-max-at-1.-and-the-area-under-the-curve-would-be-the-auc-which-was-0.9492794-which-is-considered-great." class="section level1">
+<h1>Here, I started with the fitting a logistic regression predicting a binary variable, in which I used my tracking variable which is TRUE when the pollster tracks and polls daily and false when the pollsters do not track daily. My other binary variable that I ran a regression on was &quot;multiversions&quot; which were multiple versions of the poll geared either to adult voters or newer younger voters. My coefficient estimates with tracking and weight with approval were -0.034289 with approval and tracking &amp; weight and tracking was 16.932428 . for approval, for every tracking &quot;yes&quot; there is less of possibility of approval by 0.034289. With weight, when tracking is true (1) the grade (weight) of the pollster goes down 16.932%. After I made the confusion matrix, I got Sensitivity= 0.9892063 which is the probability of approval when the polling tracks (TPR), Sepcificity = 0.7650365 (TNR), which is the probablity of tracking when the outlook was positive and Precision (PPV)= 0.8817204 which is the proportion of true for tracking when it is actually true. The AUC is how well weare predicting approval with tracking overall. For this, it was 0.7227052 which is classified as Fair. I made a density plot of log odds grouped with my binary outcome and that is shown above. Where above 0.5 it is expected to be true for tracking and below 0.5 would be predicted to be false (0). For the ROC plot, let's us vizualize th trade off between sensitivity, so for mine, when the FPR increases, do does TPR until a max at 1. And the area under the curve would be the AUC which was 0.9492794 which is considered Great.</h1>
+</div>
+<div id="logistic-regression-lasso-10-fold-cv" class="section level1">
+<h1>6. Logistic Regression, LASSO, 10-fold CV</h1>
+<pre class="r"><code>#Fit Model and Compute diagnostics
+fit9&lt;-glm(y~ approve+weight+disapprove+sample_size, data=data4, family=&quot;binomial&quot;)</code></pre>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre class="r"><code>coeftest(fit9) #Coefficients are here.</code></pre>
+<pre><code>## 
+## z test of coefficients:
+## 
+##                Estimate  Std. Error z value  Pr(&gt;|z|)    
+## (Intercept) -3.9434e+01  2.6222e+00 -15.038 &lt; 2.2e-16 ***
+## approve      4.1249e-01  3.0418e-02  13.561 &lt; 2.2e-16 ***
+## weight      -1.4201e+01  6.7205e-01 -21.130 &lt; 2.2e-16 ***
+## disapprove   5.2644e-01  2.9306e-02  17.963 &lt; 2.2e-16 ***
+## sample_size -6.0339e-04  3.8004e-05 -15.877 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>probs2&lt;-predict(fit9,type=&quot;response&quot;)
+table(predict=as.numeric(probs2&gt;.5),truth=data4$y)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict    0    1  Sum
+##     0   1540   57 1597
+##     1    239 3093 3332
+##     Sum 1779 3150 4929</code></pre>
+<pre class="r"><code>3093/(3093+57) #Sensitivity (TPR) =0.9819048</code></pre>
+<pre><code>## [1] 0.9819048</code></pre>
+<pre class="r"><code>1540/1779 #Specificity (TNR)= 0.8656549</code></pre>
+<pre><code>## [1] 0.8656549</code></pre>
+<pre class="r"><code>3093/3332 #Precision (PPV)= 0.9282713</code></pre>
+<pre><code>## [1] 0.9282713</code></pre>
+<pre class="r"><code>#10-fold CV
+library(tidyverse)
+library(lmtest)
+library(glmnet)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre><code>## Loaded glmnet 4.0-2</code></pre>
+<pre class="r"><code>y3&lt;-as.matrix(data4$approve)
+x3&lt;-model.matrix(weight~.,data=data4)[-1]
+x4&lt;-scale(x3)
+
+
+set.seed(1234)
+k=10
+data_CV &lt;- data4 %&gt;% sample_frac
+folds &lt;- ntile(1:nrow(data4),n=10) </code></pre>
+</div>
+<div id="cv-cv.glmnetx4y3familybinomial-this-is-not-working" class="section level1">
+<h1>cv&lt;-cv.glmnet(x4,y3,family=&quot;binomial&quot;) #This is not working</h1>
+</div>
+<div id="cv-cv.glmnetx4y3familybinomial" class="section level1">
+<h1>cv&lt;-cv.glmnet(x4,y3,family=&quot;binomial&quot;)</h1>
+</div>
+<div id="lasso-glmnetx4y3familybinomiallambdacvlambda.1se" class="section level1">
+<h1>lasso&lt;-glmnet(x4,y3,family=&quot;binomial&quot;,lambda=cv$lambda.1se)</h1>
+</div>
+<div id="coeflasso" class="section level1">
+<h1>coef(lasso)</h1>
+</div>
+<div id="i-included-all-this-code-in-the-comments-section-because-r-would-not-let-me-do-that.-i-talked-to-dr.-woodward-about-the-error-code-and-i-was-reccomended-to-make-sure-my-matrices-were-right-before-proceeding.-after-spending-a-long-time-i-could-not-find-the-problem-and-essential-gave-up.-i-wanted-to-show-that-at-least-i-know-how-to-run-the-code-and-would-be-explain-the-10-fold-cv-and-the-lasso.-however-i-did-do-the-first-part-of-which-is-the-logistic-binary-regression-with-more-varibles-as-well-as-computed-the-classication-diagnosis-and-fit-model-of-the-second-part.-here-i-used-sample-size-disapprove-weight-and-tracking-related-to-approval-rate.-sensitivity-tpr-0.9819048-which-is-the-probability-of-getting-have-a-pollster-that-does-track.-the-specificity-tnr-0.8656549-which-is-the-probability-of-picking-a-poll-site-that-does-not-track-and-being-right.-the-ppv-precision-is-0.9282713-which-is-the-proportion-of-classified-tracking-that-actually-track.-with-our-coefficient-estimates-we-can-see-when-the-poll-does-track-there-is-an-increase-4.1249e-01-in-approval-rating--1.4201e01-decrease-in-grade-weight-of-poll-site-increase-of-5.2644e-01-in-disapproval-and--6.0339e-04-decrease-in-sample-size.-this-is-very-interesting-because-seeing-that-there-is-an-increase-for-both-disapprove-and-approve-when-tracking-is-true-is-interesting-as-well-as-the-increase-in-sample-size.-all-these-are-significant-as-well.-if-my-lasso-and-10-fold-worked-i-would-have-been-able-to-have-seen-what-the-most-predictive-variables-are-and-how-they-fare-under-cv." class="section level1">
+<h1>I included all this code in the comments section because R would not let me do that. I talked to Dr. Woodward about the error code, and I was reccomended to make sure my matrices were right before proceeding. After spending a long time, I could not find the problem and essential gave up. I wanted to show that at least I know how to run the code and would be explain the 10-Fold CV and the LASSO. However, I did do the first part of which is the logistic binary regression with more varibles as well as computed the classication diagnosis and fit model of the second part. Here I used sample size, disapprove, weight, and tracking related to approval rate. Sensitivity (TPR) =0.9819048 which is the probability of getting have a pollster that does track. The specificity (TNR)= 0.8656549 which is the probability of picking a poll site that does not track and being right. The PPV precision is 0.9282713 which is the proportion of classified tracking that actually track. With our coefficient estimates we can see when the poll does track, there is an increase 4.1249e-01 in approval rating, -1.4201e+01 decrease in grade (weight) of poll site, increase of 5.2644e-01 in disapproval and -6.0339e-04 decrease in sample size. This is very interesting because seeing that there is an increase for both disapprove and approve when tracking is true is interesting as well as the increase in sample size. All these are significant as well. If my LASSO and 10-fold worked, I would have been able to have seen what the most predictive variables are and how they fare under CV.</h1>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>
