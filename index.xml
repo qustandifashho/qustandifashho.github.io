@@ -6,15 +6,15 @@
     <description>Recent content on My Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Tue, 08 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Test Post</title>
-      <link>/post/2020/12/08/test-post/</link>
-      <pubDate>Tue, 08 Dec 2020 00:00:00 +0000</pubDate>
+      <title>Blog Post</title>
+      <link>/post/2020/12/02/test-post/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/2020/12/08/test-post/</guid>
-      <description> Heading of my Post content of my post
-Subheading More content
+      <guid>/post/2020/12/02/test-post/</guid>
+      <description> Python Code along with R-Code The first code chunk is that of python. I loaded the &amp;quot;quakes&amp;quot; dataset
+Communication of R code with Python The second and third code chunk is that of python and R-strudio communicating with each other. I found the mean of magnitude in the quakes data set which is 4.6204000000000001
 quakes&amp;lt;- quakes r.quakes.mag.mean() ## 4.6204000000000001     </description>
     </item>
     
@@ -56,8 +56,8 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       
       <guid>/projects/</guid>
       <description> Check out some of my SDS348 Coding Projects Down Below:
- Wrangling &amp;amp; Exploratory Data Analysis
- Modeling, Inference, Prediction
+ Project 1: Exploratory Data Analysis
+ Project 2: Modeling
   -- </description>
     </item>
     

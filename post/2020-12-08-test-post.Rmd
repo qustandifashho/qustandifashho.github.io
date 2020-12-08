@@ -1,19 +1,19 @@
 ---
-title: Test Post
+title: Blog Post
 author: ''
-date: '2020-12-08'
+date: '2020-12-02'
 slug: test-post
 categories: []
 tags: []
 description: ''
 ---
-#Heading of my Post
+#Python Code along with R-Code
 
-content of my post
+The first code chunk is that of python. I loaded the "quakes" dataset
 
-## Subheading
+## Communication of R code with Python
 
-More content
+The second and third code chunk is that of python and R-strudio communicating with each other. I found the mean of magnitude in the quakes data set which is 4.6204000000000001
 
 
 ```{r}
