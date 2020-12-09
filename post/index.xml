@@ -13,9 +13,7 @@
       <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/2020/12/02/test-post/</guid>
-      <description> Python Code along with R-Code The first code chunk is that of python. I loaded the &amp;quot;quakes&amp;quot; dataset
-Communication of R code with Python The second and third code chunk is that of python and R-strudio communicating with each other. I found the mean of magnitude in the quakes data set which is 4.6204000000000001
-quakes&amp;lt;- quakes r.quakes.mag.mean() ## 4.6204000000000001     </description>
+      <description>Python Code along with R-Code Here I am looking at the Quakes dataset. I made a histogram and boxplot showing the magnitude data points. This part was done in R. They do not seem normally distributed at all. And I also tan mean(quakes$mag) to get the average of mags and got 4.6204 head(quakes) ## lat long depth mag stations ## 1 -20.42 181.62 562 4.8 41 ## 2 -20.62 181.</description>
     </item>
     
     <item>

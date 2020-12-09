@@ -74,13 +74,32 @@
 
 <div id="python-code-along-with-r-code" class="section level1">
 <h1>Python Code along with R-Code</h1>
+<div id="here-i-am-looking-at-the-quakes-dataset.-i-made-a-histogram-and-boxplot-showing-the-magnitude-data-points.-this-part-was-done-in-r.-they-do-not-seem-normally-distributed-at-all.-and-i-also-tan-meanquakesmag-to-get-the-average-of-mags-and-got-4.6204" class="section level2">
+<h2>Here I am looking at the Quakes dataset. I made a histogram and boxplot showing the magnitude data points. This part was done in R. They do not seem normally distributed at all. And I also tan mean(quakes$mag) to get the average of mags and got 4.6204</h2>
+<pre class="r"><code>head(quakes)</code></pre>
+<pre><code>##      lat   long depth mag stations
+## 1 -20.42 181.62   562 4.8       41
+## 2 -20.62 181.03   650 4.2       15
+## 3 -26.00 184.10    42 5.4       43
+## 4 -17.97 181.66   626 4.1       19
+## 5 -20.42 181.96   649 4.0       11
+## 6 -19.68 184.31   195 4.0       12</code></pre>
+<pre class="r"><code>hist(quakes$mag)</code></pre>
+<p><img src="../../../../../post/2020-12-08-test-post_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>boxplot(quakes$mag)</code></pre>
+<p><img src="../../../../../post/2020-12-08-test-post_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<pre class="r"><code>mean(quakes$mag)</code></pre>
+<pre><code>## [1] 4.6204</code></pre>
+<pre class="r"><code>quakes&lt;- quakes</code></pre>
 <p>The first code chunk is that of python. I loaded the &quot;quakes&quot; dataset</p>
+</div>
 <div id="communication-of-r-code-with-python" class="section level2">
 <h2>Communication of R code with Python</h2>
-<p>The second and third code chunk is that of python and R-strudio communicating with each other. I found the mean of magnitude in the quakes data set which is 4.6204000000000001</p>
-<pre class="r"><code>quakes&lt;- quakes</code></pre>
+<p>The second and third code chunk is that of Python and R-strudio communicating with each other. I found the mean of magnitude in the quakes data set which is 4.6204000000000001. This is the same mean as I calculated in R for Magnitude</p>
 <pre class="python"><code>r.quakes.mag.mean()</code></pre>
 <pre><code>## 4.6204000000000001</code></pre>
+<pre class="python"><code>r.quakes.mag.median()</code></pre>
+<pre><code>## 4.6</code></pre>
 <center>
 <img src="../../../../../post/2020-12-08-test-post_files/2017_infiniti_q50_red_sport_400_4k-HD.jpg" style="width:40.0%" />
 </center>
